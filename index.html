@@ -1130,9 +1130,9 @@ function initBg(){
   });
 }
 
-/* ===== Supabase 认证配置：把下面两项换成你 Supabase 项目的 URL 与 anon key ===== */
-var SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
-var SUPABASE_ANON_KEY = "YOUR-ANON-KEY";
+/* ===== Supabase 认证配置：项目 URL 与前端公开密钥（anon / publishable key） ===== */
+var SUPABASE_URL = "https://pasngubrghdohyzbpkma.supabase.co";
+var SUPABASE_ANON_KEY = "sb_publishable_oPBJp-WxQlwrL5T23gUS-w_JDEkHxk7";
 
 var sbClient = null;
 if (window.supabase && SUPABASE_URL.indexOf("YOUR-PROJECT") === -1) {
