@@ -6,7 +6,6 @@
 <meta name="theme-color" content="#efe6ff">
 <title>超自然 · 皮肤代码库</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="https://fastly.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 @property --c1 { syntax:'<color>'; inherits:true; initial-value:#8b7bf7; }
 @property --c2 { syntax:'<color>'; inherits:true; initial-value:#a78bfa; }
@@ -520,39 +519,7 @@ body.dark .update-modal-box{background:#1c1c1e;border-color:rgba(255,255,255,.1)
   </div>
 </div>
 
-<div class="logout-page hidden" id="logoutPage">
-  <div class="logout-box">
-    <div class="logout-icon"><i class="fas fa-sign-out-alt"></i></div>
-    <div class="logout-title">确认退出登录</div>
-    <div class="logout-desc">退出后需要重新登录才能继续使用，确定要退出吗？</div>
-    <div class="logout-actions">
-      <button class="logout-cancel" id="logoutCancelBtn">取消</button>
-      <button class="logout-confirm" id="logoutConfirmBtn">确认退出</button>
-    </div>
-  </div>
-</div>
-
-<div class="login" id="login">
-  <div class="login-card">
-    <div class="login-logo"><i class="fas fa-swatchbook"></i></div>
-    <div class="login-title">超自然 · 皮肤代码库</div>
-    <div class="login-sub">苏苏皮肤代码 · 全角色收录</div>
-    <div class="auth-seg" id="authSeg">
-      <button type="button" class="auth-seg-btn active" data-mode="login">登录</button>
-      <button type="button" class="auth-seg-btn" data-mode="register">注册</button>
-    </div>
-    <form id="authForm" novalidate>
-      <input id="authEmail" class="login-input" type="email" autocomplete="email" placeholder="邮箱" inputmode="email">
-      <input id="authPassword" class="login-input" type="password" autocomplete="current-password" placeholder="密码" style="margin-top:11px">
-      <input id="authPassword2" class="login-input" type="password" autocomplete="new-password" placeholder="确认密码" style="margin-top:11px;display:none">
-      <div class="auth-msg" id="authMsg"></div>
-      <button id="authBtn" class="login-btn" type="submit">登录</button>
-    </form>
-    <div class="login-note">邮箱注册 / 登录 · 数据经 Supabase 认证服务校验</div>
-  </div>
-</div>
-
-<div id="app" hidden>
+<div id="app">
 
   <div class="corner-actions">
     <button class="corner-btn palette-btn" id="paletteBtn" aria-label="配色">
@@ -772,15 +739,6 @@ body.dark .update-modal-box{background:#1c1c1e;border-color:rgba(255,255,255,.1)
         <button class="btn" id="swClearFav" style="margin-top:12px;"><span class="btn-text">清空全部收藏</span></button>
       </div>
 
-      <div class="glass">
-        <div class="setting-row">
-          <div>
-            <label>账号管理</label>
-            <div class="setting-sub">退出当前登录账号</div>
-          </div>
-        </div>
-        <button class="btn" id="logoutBtn"><span class="btn-text">退出登录</span></button>
-      </div>
     </section>
 
     <section class="page" data-page="about">
@@ -1130,92 +1088,7 @@ function initBg(){
   });
 }
 
-/* ===== Supabase 认证配置：项目 URL 与前端公开密钥（anon / publishable key） ===== */
-var SUPABASE_URL = "https://pasngubrghdohyzbpkma.supabase.co";
-var SUPABASE_ANON_KEY = "sb_publishable_oPBJp-WxQlwrL5T23gUS-w_JDEkHxk7";
-
-var sbClient = null;
-if (window.supabase && SUPABASE_URL.indexOf("YOUR-PROJECT") === -1) {
-  sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-}
-
-var loginEl=$('login');
 var app=$('app');
-var authMode='login';
-var authForm=$('authForm');
-var authEmail=$('authEmail');
-var authPassword=$('authPassword');
-var authPassword2=$('authPassword2');
-var authMsg=$('authMsg');
-var authBtn=$('authBtn');
-
-function enterApp(user,instant){
-  app.hidden=false;
-  if(user){ try{localStorage.setItem('yy_user_email',user.email||'');}catch(e){} }
-  if(instant){
-    loginEl.style.display='none';
-    loginEl.classList.add('hidden');
-  }else{
-    loginEl.classList.add('hidden');
-    setTimeout(function(){loginEl.style.display='none';},600);
-  }
-}
-function showLogin(){
-  loginEl.style.display='';
-  loginEl.classList.remove('hidden');
-  setAuthMode('login');
-}
-function setAuthMode(mode){
-  authMode=mode;
-  Array.prototype.forEach.call(document.querySelectorAll('#authSeg .auth-seg-btn'),function(b){
-    b.classList.toggle('active',b.dataset.mode===mode);
-  });
-  authPassword2.style.display = mode==='register' ? '' : 'none';
-  authBtn.textContent = mode==='register' ? '注册' : '登录';
-  authMsg.textContent='';
-}
-function setMsg(text,isErr){
-  authMsg.textContent=text||'';
-  authMsg.className='auth-msg'+(isErr?' err':' ok');
-}
-function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
-
-async function handleAuth(e){
-  e.preventDefault();
-  var email=authEmail.value.trim();
-  var pass=authPassword.value;
-  if(!validEmail(email)){ setMsg('请输入正确的邮箱地址',true); authEmail.focus(); return; }
-  if(pass.length<6){ setMsg('密码至少 6 位',true); authPassword.focus(); return; }
-  if(authMode==='register'){
-    if(pass!==authPassword2.value){ setMsg('两次输入的密码不一致',true); authPassword2.focus(); return; }
-  }
-  if(!sbClient){ setMsg('认证服务未配置：请在 index.html 顶部填入 Supabase URL 与 anon key',true); return; }
-  authBtn.disabled=true; authBtn.textContent='请稍候…';
-  try{
-    if(authMode==='register'){
-      var r=await sbClient.auth.signUp({email:email,password:pass});
-      if(r.error) throw r.error;
-      if(r.data&&r.data.session){ enterApp(r.data.user,false); }
-      else { setMsg('注册成功，请先到邮箱完成验证，再回来登录',false); setAuthMode('login'); }
-    }else{
-      var l=await sbClient.auth.signInWithPassword({email:email,password:pass});
-      if(l.error) throw l.error;
-      enterApp(l.data.user,false);
-    }
-  }catch(err){
-    setMsg(err&&err.message?err.message:'登录失败，请重试',true);
-  }finally{
-    authBtn.disabled=false;
-    if(authMode==='register')authBtn.textContent='注册'; else authBtn.textContent='登录';
-  }
-}
-function bindAuth(){
-  Array.prototype.forEach.call(document.querySelectorAll('#authSeg .auth-seg-btn'),function(b){
-    b.addEventListener('click',function(){ setAuthMode(b.dataset.mode); });
-  });
-  authForm.addEventListener('submit',handleAuth);
-}
-bindAuth();
 
 var pages=Array.prototype.slice.call(document.querySelectorAll('.page'));
 function goTo(pid){
@@ -1436,18 +1309,6 @@ function initSettings(){
     var v=this.value;
     document.body.style.setProperty('--blur',v+'px');
     $('blurVal').textContent=v+'px';
-  });
-  $('logoutBtn').addEventListener('click',function(){
-    $('logoutPage').classList.remove('hidden');
-  });
-  $('logoutCancelBtn').addEventListener('click',function(){
-    $('logoutPage').classList.add('hidden');
-  });
-  $('logoutConfirmBtn').addEventListener('click',async function(){
-    try{ if(sbClient) await sbClient.auth.signOut(); }catch(e){}
-    localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem('yy_user_email');
-    location.reload();
   });
   if(soundOn)$('soundToggle').classList.add('on');
 }
@@ -3683,18 +3544,6 @@ function init(){
     SoundwaveUI.init();
   });
 
-  (async function(){
-    try{
-      if(sbClient){
-        var {data:{session}} = await sbClient.auth.getSession();
-        if(session&&session.user){ enterApp(session.user,true); return; }
-      }
-      showLogin();
-    }catch(err){
-      console.error(err);
-      showLogin();
-    }
-  })();
 }
 
 if(document.readyState==='loading'){
