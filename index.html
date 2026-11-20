@@ -1,0 +1,3744 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#efe6ff">
+<title>超自然 · 皮肤代码库</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://fastly.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+@property --c1 { syntax:'<color>'; inherits:true; initial-value:#8b7bf7; }
+@property --c2 { syntax:'<color>'; inherits:true; initial-value:#a78bfa; }
+@property --glow { syntax:'<color>'; inherits:true; initial-value:rgba(139,123,247,.28); }
+@property --bg-base { syntax:'<color>'; inherits:true; initial-value:#efe6ff; }
+@property --bg-card { syntax:'<color>'; inherits:true; initial-value:rgba(255,255,255,.58); }
+@property --text-main { syntax:'<color>'; inherits:true; initial-value:#2a1a3a; }
+@property --text-sub { syntax:'<color>'; inherits:true; initial-value:#5a4a6a; }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;-webkit-overflow-scrolling:touch;}
+body{
+  min-height:100vh;
+  font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg-base);
+  color:var(--text-main);
+  overflow-x:hidden;
+  font-size:11px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  --c1:#8b7bf7;--c2:#a78bfa;--glow:rgba(139,123,247,.28);--blur:46px;
+  --bg-base:#efe6ff;--bg-card:rgba(255,255,255,.58);
+  --text-main:#2a1a3a;--text-sub:#5a4a6a;
+  --glass-top:rgba(255,255,255,.66);
+  --glass-bot:rgba(255,255,255,.38);
+  transition:background .5s ease,color .5s ease;
+}
+body.dark{
+  --bg-base:#0d0720;--bg-card:rgba(28,18,48,.5);
+  --text-main:#eee8f5;--text-sub:#a898b8;
+  --glow:rgba(139,123,247,.42);
+  --glass-top:rgba(60,44,96,.52);
+  --glass-bot:rgba(28,18,48,.4);
+}
+body.dark .glass{border-color:rgba(255,255,255,.12);}
+body.dark .search-box,body.dark .panel,body.dark .dock{background:rgba(28,18,48,.68);border-color:rgba(255,255,255,.1);}
+body.dark .skin-item{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.06);}
+body.dark .skin-item:hover{background:rgba(255,255,255,.08);}
+body.dark .skin-tab{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);color:#a898b8;}
+body.dark .skin-tab.active{background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;border-color:transparent;}
+body.dark .skin-stat-bar{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.08);}
+body.dark .skin-select-trigger{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);color:#eee8f5;}
+body.dark .skin-select-trigger:hover{background:rgba(255,255,255,.1);}
+body.dark .bg-url-input{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);color:#eee8f5;}
+body.dark .setting-row+.setting-row{border-top-color:rgba(255,255,255,.06);}
+body.dark .corner-btn{background:rgba(28,18,48,.6);border-color:rgba(255,255,255,.1);color:#eee8f5;}
+body.dark .color-panel{background:rgba(28,18,48,.78);border-color:rgba(255,255,255,.1);}
+body.dark .skin-picker-box{background:rgba(28,18,48,.85);border-color:rgba(255,255,255,.1);}
+body.dark .skin-picker-search{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);color:#eee8f5;}
+body.dark .skin-picker-item{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.08);color:#eee8f5;}
+body.dark .skin-picker-item:hover{background:rgba(255,255,255,.1);}
+body.dark .skin-picker-item-count{background:rgba(255,255,255,.1);color:#cbbdff;}
+body.dark .skin-part{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);}
+body.dark .skin-part:hover{background:rgba(255,255,255,.12);}
+body.dark .export-btn{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);color:#eee8f5;}
+body.dark .disclaimer{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08);}
+body.dark .footer-copyright .line{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.08);}
+body.dark .about-item{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.08);}
+body.dark .about-item:hover{background:rgba(255,255,255,.1);}
+body.dark .update-modal-box{background:rgba(28,18,48,.95);border-color:rgba(255,255,255,.1);}
+body.dark .update-content{color:#a898b8;}
+body.dark .header .pill{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.08);}
+body.dark .header .badge{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.08);}
+body.dark .logout-box{background:rgba(28,18,48,.85);border-color:rgba(255,255,255,.1);}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(65vw 55vw at 50% -10%,var(--glow),transparent 70%),
+    radial-gradient(55vw 55vw at 105% 105%,var(--glow),transparent 72%);
+  transition:background .6s ease;
+}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:rgba(128,128,128,.25);border-radius:99px;}
+
+#bgLayer{position:fixed;inset:0;z-index:-1;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;transition:opacity .7s ease;pointer-events:none;}
+#bgLayer.on{opacity:1;}
+#bgLayer::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(240,230,255,.3) 0%,rgba(240,230,255,.45) 100%);transition:background .6s ease;}
+body.dark #bgLayer::after{background:linear-gradient(180deg,rgba(10,6,26,.4) 0%,rgba(10,6,26,.55) 100%);}
+#fx{position:fixed;inset:0;z-index:1;pointer-events:none;}
+
+@keyframes cardIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+@keyframes gradShift{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+@keyframes shimmer{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 var(--glow);}50%{box-shadow:0 0 0 6px rgba(0,0,0,0);}}
+@keyframes modalIn{from{opacity:0;transform:scale(.92) translateY(12px);}to{opacity:1;transform:scale(1) translateY(0);}}
+@keyframes coverPulse{
+  0%,100%{box-shadow:0 0 0 2px rgba(255,255,255,.55),0 6px 18px -10px var(--c1),0 0 0 0 rgba(120,80,255,.45);}
+  50%{box-shadow:0 0 0 2px rgba(255,255,255,.75),0 8px 22px -10px var(--c1),0 0 0 9px rgba(120,80,255,0);}
+}
+@keyframes lineSheen{0%{transform:translateX(-120%);}55%,100%{transform:translateX(120%);}}
+
+.login{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(240,230,255,.5);backdrop-filter:blur(22px) saturate(190%);-webkit-backdrop-filter:blur(22px) saturate(190%);transition:opacity .5s ease,visibility .5s;}
+body.dark .login{background:rgba(10,6,26,.55);}
+.login.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.login-card{width:min(320px,100%);padding:28px 20px 22px;border-radius:26px;background:linear-gradient(150deg,var(--glass-top),var(--glass-bot));border:1px solid rgba(255,255,255,.78);backdrop-filter:blur(50px) saturate(230%);-webkit-backdrop-filter:blur(50px) saturate(230%);text-align:center;box-shadow:0 40px 90px -40px rgba(80,60,140,.6),0 4px 14px -8px rgba(80,60,140,.25),inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(255,255,255,.3);animation:cardIn .6s cubic-bezier(.22,1,.36,1) both;}
+.login-avatar{width:72px;height:72px;margin:0 auto 16px;border-radius:50%;overflow:hidden;background:rgba(120,80,255,.08);border:2px solid rgba(255,255,255,.6);box-shadow:0 0 30px -8px var(--c1);transition:box-shadow .5s ease;}
+.login-avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+.login-title{font-size:16px;font-weight:700;letter-spacing:.8px;background:linear-gradient(100deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:5px;}
+.login-sub{font-size:10.5px;color:var(--text-sub);letter-spacing:.4px;margin-bottom:20px;}
+.login-input{width:100%;padding:11px 18px;border-radius:13px;background:rgba(120,80,255,.08);border:1px solid rgba(120,80,255,.16);color:var(--text-main);font-size:15px;font-family:inherit;outline:none;text-align:center;letter-spacing:2px;transition:border-color .3s,background .3s,box-shadow .3s;}
+.login-input::placeholder{letter-spacing:1px;color:var(--text-sub);opacity:.6;}
+.login-input:focus{border-color:var(--c1);background:rgba(120,80,255,.13);box-shadow:0 0 0 4px var(--glow);}
+.login-btn{width:100%;padding:12px;margin-top:14px;border:none;border-radius:13px;background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;font-size:13px;font-weight:600;font-family:inherit;letter-spacing:5px;cursor:pointer;transition:transform .25s cubic-bezier(.34,1.5,.5,1),filter .25s;box-shadow:0 12px 28px -12px var(--c1);}
+.login-btn:active{transform:scale(.97);filter:brightness(1.12);}
+.login-note{margin-top:13px;font-size:9.5px;color:var(--text-sub);opacity:.6;}
+
+.update-modal{position:fixed;inset:0;z-index:99999;background:rgba(20,10,40,.4);backdrop-filter:blur(26px) saturate(190%);-webkit-backdrop-filter:blur(26px) saturate(190%);display:flex;align-items:center;justify-content:center;padding:20px;transition:opacity .4s ease,visibility .4s;}
+.update-modal.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.update-modal-box{background:linear-gradient(150deg,var(--glass-top),var(--glass-bot));backdrop-filter:blur(50px) saturate(230%);-webkit-backdrop-filter:blur(50px) saturate(230%);border-radius:26px;padding:22px 20px 18px;max-width:320px;width:100%;border:1px solid rgba(255,255,255,.78);box-shadow:0 30px 80px -30px rgba(80,60,140,.6),0 4px 14px -8px rgba(80,60,140,.25),inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(255,255,255,.3);animation:modalIn .5s cubic-bezier(.34,1.56,.64,1) both;}
+.update-modal-box h3{text-align:center;font-size:15.5px;font-weight:700;margin-bottom:12px;background:linear-gradient(100deg,var(--c1),var(--c2));background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradShift 4s ease-in-out infinite;letter-spacing:.8px;}
+.update-content{font-size:11px;line-height:1.85;margin-bottom:16px;color:var(--text-sub);padding-left:0;}
+.update-content li{list-style:none;margin-bottom:5px;display:flex;align-items:flex-start;gap:7px;font-weight:500;letter-spacing:.2px;}
+.update-content li::before{content:"✦";color:var(--c1);font-size:10px;font-weight:700;flex-shrink:0;line-height:1.85;}
+.update-close-btn{width:100%;padding:10px;background:linear-gradient(135deg,var(--c1),var(--c2));background-size:200% 200%;color:#fff;border:none;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit;animation:gradShift 4s ease-in-out infinite;box-shadow:0 8px 24px -10px var(--c1);letter-spacing:2px;}
+.update-close-btn:active{transform:scale(.96);}
+
+.logout-page{position:fixed;inset:0;z-index:99998;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(240,230,255,.45);backdrop-filter:blur(30px) saturate(190%);-webkit-backdrop-filter:blur(30px) saturate(190%);transition:opacity .4s ease,visibility .4s;}
+body.dark .logout-page{background:rgba(10,6,26,.5);}
+.logout-page.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.logout-box{width:min(320px,100%);padding:26px 22px 20px;border-radius:26px;background:linear-gradient(150deg,var(--glass-top),var(--glass-bot));border:1px solid rgba(255,255,255,.78);backdrop-filter:blur(50px) saturate(230%);-webkit-backdrop-filter:blur(50px) saturate(230%);text-align:center;box-shadow:0 40px 90px -40px rgba(80,60,140,.6),0 4px 14px -8px rgba(80,60,140,.25),inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(255,255,255,.3);animation:modalIn .5s cubic-bezier(.34,1.56,.64,1) both;}
+.logout-icon{width:54px;height:54px;margin:0 auto 14px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;font-size:21px;box-shadow:0 12px 28px -12px var(--c1);}
+.logout-title{font-size:15.5px;font-weight:700;margin-bottom:7px;color:var(--text-main);letter-spacing:.4px;}
+.logout-desc{font-size:11px;color:var(--text-sub);line-height:1.75;margin-bottom:18px;}
+.logout-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.logout-cancel{padding:10px;border-radius:13px;border:1px solid rgba(120,80,255,.18);background:rgba(255,255,255,.45);color:var(--text-main);font-family:inherit;font-size:11.5px;font-weight:600;cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);}
+.logout-cancel:hover{background:rgba(255,255,255,.75);transform:translateY(-1px);}
+.logout-cancel:active{transform:scale(.96);}
+.logout-confirm{padding:10px;border-radius:13px;border:none;background:linear-gradient(135deg,#ff6b6b,#ee5a5a);color:#fff;font-family:inherit;font-size:11.5px;font-weight:600;cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);box-shadow:0 8px 24px -10px rgba(255,107,107,.6);}
+.logout-confirm:hover{transform:translateY(-1px);filter:brightness(1.06);}
+.logout-confirm:active{transform:scale(.96);}
+
+.pages{position:relative;z-index:2;min-height:100vh;}
+.page{display:none;padding:66px 16px 210px;}
+.page.active{display:block;animation:cardIn .5s cubic-bezier(.22,1,.36,1) both;}
+
+.header{max-width:540px;margin:0 auto 15px;text-align:center;padding:6px 0 2px;}
+.header .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 15px;border-radius:100px;font-size:8px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:var(--text-sub);background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.55);backdrop-filter:blur(18px) saturate(190%);-webkit-backdrop-filter:blur(18px) saturate(190%);margin-bottom:10px;box-shadow:0 4px 16px -8px rgba(80,60,140,.4),inset 0 1px 0 rgba(255,255,255,.7),inset 0 -1px 0 rgba(255,255,255,.2);}
+.header .badge i{color:var(--c1);opacity:.8;font-size:8.5px;}
+.header h1{font-size:clamp(19px,5vw,26px);font-weight:800;letter-spacing:-.3px;line-height:1.2;background:linear-gradient(120deg,var(--c1) 0%,var(--c2) 40%,#7c9cfc 70%,var(--c2) 100%);background-size:300% 300%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradShift 10s ease-in-out infinite;margin-bottom:5px;text-shadow:0 4px 20px rgba(120,80,255,.12);}
+.header .sub{font-size:9px;font-weight:600;color:var(--text-sub);opacity:.75;letter-spacing:3.2px;text-transform:uppercase;margin-bottom:11px;position:relative;display:inline-block;}
+.header .sub::before,.header .sub::after{content:"✦";position:absolute;top:50%;transform:translateY(-50%);color:var(--c1);opacity:.35;font-size:6.5px;}
+.header .sub::before{left:-13px;}
+.header .sub::after{right:-13px;}
+.header .meta-row{display:flex;flex-wrap:wrap;justify-content:center;gap:7px 9px;margin-top:11px;}
+.header .pill{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;border-radius:100px;font-size:9.5px;font-weight:600;color:var(--text-sub);background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.55);backdrop-filter:blur(18px) saturate(190%);-webkit-backdrop-filter:blur(18px) saturate(190%);transition:all .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 6px 20px -12px rgba(80,60,140,.4),inset 0 1px 0 rgba(255,255,255,.7),inset 0 -1px 0 rgba(255,255,255,.2);letter-spacing:.3px;}
+.header .pill i{color:var(--c1);opacity:.8;font-size:8.5px;}
+.header .pill strong{font-weight:800;background:linear-gradient(100deg,var(--c1),var(--c2));background-size:200% 200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:gradShift 6s ease-in-out infinite;}
+.header .pill:hover{background:rgba(255,255,255,.68);transform:translateY(-2px);box-shadow:0 10px 26px -14px rgba(80,60,140,.5),inset 0 1px 0 rgba(255,255,255,.8);}
+
+.glass{position:relative;max-width:540px;margin:0 auto 13px;padding:18px;border-radius:22px;background:linear-gradient(150deg,var(--glass-top),var(--glass-bot));backdrop-filter:blur(calc(var(--blur) + 6px)) saturate(230%);-webkit-backdrop-filter:blur(calc(var(--blur) + 6px)) saturate(230%);border:1px solid rgba(255,255,255,.72);box-shadow:0 24px 70px -38px rgba(80,60,140,.55),0 3px 14px -8px rgba(80,60,140,.22),inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(255,255,255,.28),inset 0 0 30px rgba(255,255,255,.05);animation:cardIn .5s cubic-bezier(.22,1,.36,1) both;}
+.section-title{font-size:9.5px;color:var(--text-sub);letter-spacing:1.6px;text-transform:uppercase;font-weight:700;margin-bottom:9px;display:flex;align-items:center;gap:6px;}
+.section-title::before{content:'';width:3px;height:10px;border-radius:2px;background:linear-gradient(180deg,var(--c1),var(--c2));box-shadow:0 0 8px var(--c1);}
+
+.btn{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 18px;border-radius:13px;text-decoration:none;color:#fff;font-size:12px;font-family:inherit;font-weight:600;border:none;cursor:pointer;overflow:hidden;background:linear-gradient(135deg,var(--c1),var(--c2));background-size:200% 200%;animation:gradShift 6s ease-in-out infinite;box-shadow:0 10px 26px -14px rgba(80,60,140,.9);transition:transform .3s cubic-bezier(.34,1.5,.5,1),filter .25s;}
+.btn+.btn{margin-top:9px;}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.06);}
+.btn:active{transform:scale(.975);filter:brightness(1.14);}
+.btn::after{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.32),transparent);transform:skewX(-18deg);transition:left .7s cubic-bezier(.22,1,.36,1);}
+.btn:hover::after{left:120%;}
+.btn-text{flex:1;text-align:center;}
+
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:11px 0;}
+.setting-row+.setting-row{border-top:1px solid rgba(120,80,255,.1);}
+.setting-row label{font-size:11.5px;color:var(--text-main);letter-spacing:.2px;}
+.setting-sub{font-size:10px;color:var(--text-sub);opacity:.7;margin-top:2px;letter-spacing:.2px;}
+.toggle{position:relative;width:44px;height:25px;border-radius:99px;background:rgba(120,80,255,.2);cursor:pointer;flex:none;transition:background .35s ease,box-shadow .35s ease;}
+.toggle.on{background:linear-gradient(135deg,var(--c1),var(--c2));box-shadow:0 0 18px -4px var(--c1);}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.25);transition:left .42s cubic-bezier(.34,1.56,.64,1);}
+.toggle.on::after{left:22px;}
+.range-wrap{padding:11px 0;}
+.range-wrap+.range-wrap{border-top:1px solid rgba(120,80,255,.1);}
+.range-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px;}
+.range-head label{font-size:11.5px;color:var(--text-main);}
+.range-value{font-size:10.5px;color:var(--text-sub);font-variant-numeric:tabular-nums;}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:99px;background:rgba(120,80,255,.18);outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.3),0 0 0 4px var(--glow);transition:transform .2s ease;}
+input[type=range]::-webkit-slider-thumb:active{transform:scale(1.2);}
+
+.bg-presets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:4px 0 13px;}
+.bg-thumb{position:relative;aspect-ratio:1;border-radius:12px;border:2px solid transparent;padding:0;cursor:pointer;overflow:hidden;background-color:rgba(120,80,255,.08);background-size:cover;background-position:center;transition:transform .28s cubic-bezier(.34,1.5,.5,1),border-color .25s,box-shadow .28s;}
+.bg-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 55%,rgba(0,0,0,.55));}
+.bg-thumb:hover{transform:scale(1.07);}
+.bg-thumb.selected{border-color:var(--c1);box-shadow:0 0 0 3px var(--glow),0 0 22px -8px var(--c1);}
+.bg-thumb-label{position:absolute;left:0;right:0;bottom:0;padding:4px 2px;font-size:8px;text-align:center;color:#fff;z-index:1;letter-spacing:.2px;text-shadow:0 1px 3px rgba(0,0,0,.6);}
+.bg-url-input{width:100%;padding:10px 14px;border-radius:12px;background:rgba(120,80,255,.08);border:1px solid rgba(120,80,255,.16);color:var(--text-main);font-size:11.5px;font-family:inherit;outline:none;margin-bottom:9px;transition:border-color .3s,background .3s,box-shadow .3s;}
+.bg-url-input:focus{border-color:var(--c1);background:rgba(120,80,255,.13);box-shadow:0 0 0 4px var(--glow);}
+.bg-url-input::placeholder{color:var(--text-sub);opacity:.6;}
+
+.corner-actions{position:fixed;left:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:99;display:flex;gap:10px;align-items:flex-end;}
+.corner-btn{position:relative;width:46px;height:46px;border-radius:15px;border:1px solid rgba(255,255,255,.72);background:linear-gradient(150deg,var(--glass-top),var(--glass-bot));backdrop-filter:blur(34px) saturate(230%);-webkit-backdrop-filter:blur(34px) saturate(230%);box-shadow:0 14px 34px -14px rgba(80,60,140,.65),inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(255,255,255,.25);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-main);padding:5px;transition:transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;}
+.corner-btn:hover{transform:translateY(-3px) scale(1.06);}
+.corner-btn:active{transform:scale(.92);}
+.palette-btn{padding:5px;}
+.palette-grad{display:block;width:100%;height:100%;border-radius:10px;background:linear-gradient(135deg,var(--c1),var(--c2));transition:background .5s ease;position:relative;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -1px 0 rgba(0,0,0,.15);}
+.palette-grad::after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);background-size:200% 100%;animation:shimmer 3.4s linear infinite;}
+
+.color-panel{position:fixed;left:16px;bottom:calc(20px + env(safe-area-inset-bottom,0px) + 58px);z-index:100;width:min(300px,calc(100vw - 32px));padding:16px;border-radius:22px;background:linear-gradient(150deg,var(--glass-top),var(--glass-bot));backdrop-filter:blur(42px) saturate(230%);-webkit-backdrop-filter:blur(42px) saturate(230%);border:1px solid rgba(255,255,255,.72);box-shadow:0 30px 80px -24px rgba(80,60,140,.65),0 4px 14px -8px rgba(80,60,140,.25),inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(255,255,255,.28);opacity:0;visibility:hidden;transform:translateY(16px) scale(.9);transform-origin:bottom left;transition:opacity .32s ease,visibility .32s,transform .5s cubic-bezier(.34,1.56,.64,1);}
+.color-panel.open{opacity:1;visibility:visible;transform:translateY(0) scale(1);}
+.color-panel-title{font-size:9.5px;color:var(--text-sub);letter-spacing:1.5px;margin-bottom:9px;text-transform:uppercase;font-weight:700;}
+.color-panel-title:not(:first-child){margin-top:4px;}
+.color-panel-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.color-panel-colors{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
+.color-panel-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(120,80,255,.18),transparent);margin:14px 0;}
+.cp-swatch{position:relative;aspect-ratio:1;border-radius:10px;border:2px solid transparent;cursor:pointer;padding:0;transition:transform .32s cubic-bezier(.34,1.56,.64,1),border-color .22s,box-shadow .3s;}
+.cp-swatch:hover{transform:scale(1.14) rotate(-2deg);z-index:2;}
+.cp-swatch.selected{border-color:#fff;box-shadow:0 0 0 2px var(--c1),0 0 22px -4px var(--c1);}
+
+.dock-wrap{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);z-index:101;}
+.dock{position:relative;display:flex;align-items:center;gap:9px;height:46px;padding:0 24px;border-radius:999px;background:linear-gradient(150deg,var(--glass-top),var(--glass-bot));backdrop-filter:blur(40px) saturate(230%);-webkit-backdrop-filter:blur(40px) saturate(230%);border:1px solid rgba(255,255,255,.78);box-shadow:0 18px 46px -18px rgba(80,60,140,.65),0 3px 10px -6px rgba(80,60,140,.25),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.3);user-select:none;touch-action:none;cursor:pointer;transition:box-shadow .3s,transform .3s cubic-bezier(.34,1.56,.64,1);overflow:hidden;}
+.dock::before{content:'';position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.95),transparent);}
+.dock:hover{transform:translateX(-50%) translateY(-2px);box-shadow:0 22px 52px -18px rgba(80,60,140,.75),0 3px 10px -6px rgba(80,60,140,.3),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.3);}
+.dock.active{box-shadow:0 18px 46px -18px rgba(80,60,140,.65),0 0 0 1px var(--c1),0 0 24px -6px var(--c1),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.3);}
+.dock-dot{width:7px;height:7px;border-radius:50%;background:var(--c1);box-shadow:0 0 10px var(--c1);transition:background .5s ease;animation:pulseGlow 2.5s ease-in-out infinite;}
+.dock-label{font-size:12px;font-weight:600;letter-spacing:.5px;color:var(--text-main);}
+.dock-arrow{width:11px;height:11px;opacity:.55;color:var(--text-main);transition:transform .5s cubic-bezier(.34,1.4,.5,1);}
+.dock.active .dock-arrow{transform:rotate(180deg);opacity:.9;}
+
+.panel{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px) + 60px);left:50%;z-index:100;min-width:200px;padding:9px;border-radius:22px;background:linear-gradient(150deg,var(--glass-top),var(--glass-bot));backdrop-filter:blur(44px) saturate(230%);-webkit-backdrop-filter:blur(44px) saturate(230%);border:1px solid rgba(255,255,255,.78);box-shadow:0 30px 70px -24px rgba(80,60,140,.65),0 4px 14px -8px rgba(80,60,140,.25),inset 0 1px 0 rgba(255,255,255,.9),inset 0 -1px 0 rgba(255,255,255,.3);opacity:0;visibility:hidden;transform:translateX(-50%) translateY(16px) scale(.94);transition:opacity .35s ease,visibility .35s,transform .5s cubic-bezier(.34,1.4,.5,1);}
+.panel.open{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0) scale(1);}
+.panel-item{display:flex;align-items:center;gap:11px;width:100%;padding:10px 15px;border:none;background:none;color:var(--text-sub);font-family:inherit;font-size:11.5px;font-weight:600;text-align:left;border-radius:14px;cursor:pointer;opacity:0;transform:translateY(-8px);transition:background .22s ease,color .22s ease,opacity .3s ease,transform .4s cubic-bezier(.34,1.56,.64,1);letter-spacing:.2px;}
+.panel.open .panel-item{opacity:1;transform:translateY(0);transition-delay:calc(var(--i) * 38ms + 60ms);}
+.panel-item i{font-size:11px;width:14px;text-align:center;opacity:.7;transition:all .25s;}
+.panel-item:hover{background:rgba(120,80,255,.12);color:var(--text-main);}
+.panel-item:hover i{opacity:1;color:var(--c1);transform:scale(1.15);}
+.panel-item.active{background:linear-gradient(100deg,rgba(120,80,255,.18),rgba(120,80,255,.06));color:var(--text-main);box-shadow:inset 3px 0 0 var(--c1);}
+.panel-item.active i{opacity:1;color:var(--c1);}
+
+.skin-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:2px 0 10px;}
+.skin-tab{padding:7px 14px;border-radius:12px;border:1px solid rgba(120,80,255,.16);background:rgba(255,255,255,.45);color:var(--text-sub);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);letter-spacing:.2px;}
+.skin-tab:hover{background:rgba(255,255,255,.78);color:var(--text-main);transform:translateY(-1px);}
+.skin-tab.active{background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;border-color:transparent;box-shadow:0 6px 20px -8px var(--c1);}
+
+.skin-select-trigger{display:flex;align-items:center;gap:10px;width:100%;padding:11px 15px;border-radius:14px;background:rgba(120,80,255,.08);border:1px solid rgba(120,80,255,.18);color:var(--text-main);font-size:12px;font-family:inherit;cursor:pointer;text-align:left;transition:all .25s cubic-bezier(.34,1.56,.64,1);}
+.skin-select-trigger:hover{background:rgba(120,80,255,.14);border-color:rgba(120,80,255,.3);}
+.skin-select-trigger:active{transform:scale(.985);}
+.skin-select-icon{flex:none;width:22px;height:22px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:9.5px;color:#fff;background:linear-gradient(135deg,var(--c1),var(--c2));box-shadow:0 4px 12px -6px var(--c1);}
+.skin-select-value{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;letter-spacing:.2px;}
+.skin-select-value.placeholder{color:var(--text-sub);opacity:.7;font-weight:500;}
+.skin-select-arrow{flex:none;font-size:11px;color:var(--c1);opacity:.75;}
+
+.skin-stat-bar{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-radius:13px;background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.55);margin-top:10px;font-size:10.5px;color:var(--text-sub);letter-spacing:.2px;box-shadow:inset 0 1px 0 rgba(255,255,255,.6);}
+.skin-stat-bar span{display:inline-flex;align-items:center;gap:5px;}
+.skin-stat-bar i{font-size:8.5px;color:var(--c1);opacity:.75;}
+.skin-stat-bar strong{font-weight:800;background:linear-gradient(100deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums;}
+
+.skin-list{display:flex;flex-direction:column;gap:9px;}
+.skin-item{position:relative;padding:13px 14px 13px 17px;border-radius:17px;background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.58);backdrop-filter:blur(12px) saturate(180%);-webkit-backdrop-filter:blur(12px) saturate(180%);transition:all .25s cubic-bezier(.34,1.56,.64,1);overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 -1px 0 rgba(255,255,255,.2);}
+.skin-item::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:calc(100% - 30px);border-radius:0 3px 3px 0;background:linear-gradient(180deg,var(--c1),var(--c2));opacity:0;transition:opacity .3s ease;box-shadow:0 0 10px var(--c1);}
+.skin-item:hover{background:rgba(255,255,255,.72);transform:translateX(2px);box-shadow:0 8px 24px -14px rgba(80,60,140,.4),inset 0 1px 0 rgba(255,255,255,.7);}
+.skin-item:hover::before{opacity:1;}
+.skin-item-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:9px;}
+.skin-item-name{font-size:11.5px;font-weight:700;color:var(--text-main);letter-spacing:.2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.skin-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:8.5px;font-weight:700;background:rgba(120,80,255,.18);color:var(--c1);letter-spacing:.3px;}
+.skin-badge.badge-extra{background:rgba(255,174,123,.22);color:#e07a3c;}
+.skin-badge.badge-original{background:rgba(120,120,140,.2);color:#6a6a80;}
+.skin-parts{display:flex;flex-wrap:wrap;gap:7px;}
+.skin-part{display:inline-flex;align-items:center;gap:7px;padding:6px 12px 6px 8px;border-radius:11px;background:rgba(120,80,255,.08);border:1px solid rgba(120,80,255,.16);color:var(--text-main);font-family:inherit;font-size:11px;cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);}
+.skin-part:hover{background:rgba(120,80,255,.16);border-color:var(--c1);transform:translateY(-1px);}
+.skin-part:active{transform:scale(.95);}
+.skin-part.copied{background:linear-gradient(135deg,var(--c1),var(--c2));border-color:transparent;box-shadow:0 6px 18px -6px var(--c1);}
+.skin-part.copied .skin-part-label{background:rgba(255,255,255,.25);color:#fff;}
+.skin-part.copied .skin-part-value{color:#fff;}
+.skin-part-label{display:inline-flex;align-items:center;justify-content:center;padding:2px 7px;border-radius:7px;font-size:9.5px;font-weight:700;letter-spacing:.4px;background:rgba(120,80,255,.18);color:var(--c1);transition:all .25s;}
+.skin-part-value{font-weight:800;letter-spacing:.4px;font-variant-numeric:tabular-nums;background:linear-gradient(100deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent;transition:all .25s;}
+.skin-empty{text-align:center;padding:42px 16px;color:var(--text-sub);font-size:11px;opacity:.6;letter-spacing:.3px;}
+.skin-empty::before{content:"✦";display:block;font-size:20px;margin-bottom:10px;opacity:.35;color:var(--c1);}
+
+.export-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:13px;}
+.export-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:10px 6px;border-radius:12px;border:1px solid rgba(120,80,255,.18);background:rgba(255,255,255,.45);color:var(--text-main);font-family:inherit;font-size:10.5px;font-weight:700;cursor:pointer;transition:all .25s cubic-bezier(.34,1.56,.64,1);letter-spacing:.2px;}
+.export-btn:hover{background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;border-color:transparent;transform:translateY(-2px);box-shadow:0 8px 20px -8px var(--c1);}
+.export-btn:active{transform:scale(.96);}
+.export-btn i{font-size:10.5px;}
+
+.skin-picker-overlay{position:fixed;inset:0;z-index:1200;background:rgba(20,10,40,.5);backdrop-filter:blur(22px) saturate(190%);-webkit-backdrop-filter:blur(22px) saturate(190%);display:flex;align-items:flex-end;justify-content:center;padding:0;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s;}
+.skin-picker-overlay.open{opacity:1;visibility:visible;}
+.skin-picker-box{width:100%;max-width:540px;max-height:78vh;display:flex;flex-direction:column;background:linear-gradient(150deg,var(--glass-top),var(--glass-bot));backdrop-filter:blur(50px) saturate(230%);-webkit-backdrop-filter:blur(50px) saturate(230%);border:1px solid rgba(255,255,255,.78);border-bottom:none;border-radius:26px 26px 0 0;box-shadow:0 -20px 60px -20px rgba(80,60,140,.7),inset 0 1px 0 rgba(255,255,255,.9);transform:translateY(40px);transition:transform .5s cubic-bezier(.34,1.4,.5,1);overflow:hidden;}
+.skin-picker-overlay.open .skin-picker-box{transform:translateY(0);}
+.skin-picker-handle{width:40px;height:4px;border-radius:99px;background:rgba(120,80,255,.35);margin:11px auto 0;flex:none;}
+.skin-picker-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 8px;flex:none;}
+.skin-picker-title{font-size:12.5px;font-weight:700;letter-spacing:.3px;background:linear-gradient(100deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent;display:flex;align-items:center;gap:7px;}
+.skin-picker-total{font-size:9.5px;font-weight:700;padding:2px 9px;border-radius:99px;background:rgba(120,80,255,.14);color:var(--c1);letter-spacing:.2px;-webkit-text-fill-color:var(--c1);}
+.skin-picker-close{width:29px;height:29px;border-radius:50%;border:none;background:rgba(120,80,255,.1);color:var(--text-sub);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;font-family:inherit;flex:none;}
+.skin-picker-close:hover{background:rgba(120,80,255,.22);color:var(--text-main);}
+.skin-picker-close:active{transform:scale(.9);}
+.skin-picker-search-wrap{padding:0 20px 10px;flex:none;position:relative;}
+.skin-picker-search{width:100%;padding:10px 34px 10px 34px;border-radius:12px;background:rgba(120,80,255,.08);border:1px solid rgba(120,80,255,.16);color:var(--text-main);font-size:12px;font-family:inherit;outline:none;transition:border-color .3s,background .3s,box-shadow .3s;}
+.skin-picker-search:focus{border-color:var(--c1);background:rgba(120,80,255,.14);box-shadow:0 0 0 4px var(--glow);}
+.skin-picker-search::placeholder{color:var(--text-sub);opacity:.6;}
+.skin-picker-search-icon{position:absolute;left:32px;top:50%;transform:translateY(-50%);font-size:10.5px;color:var(--c1);opacity:.6;pointer-events:none;}
+.skin-picker-search-clear{position:absolute;right:31px;top:50%;transform:translateY(-50%);width:18px;height:18px;border-radius:50%;border:none;background:rgba(120,80,255,.16);color:var(--text-sub);font-size:9px;cursor:pointer;display:none;align-items:center;justify-content:center;font-family:inherit;padding:0;line-height:1;}
+.skin-picker-search-clear.show{display:flex;}
+.skin-picker-search-clear:hover{background:rgba(120,80,255,.3);color:var(--text-main);}
+.skin-picker-list{flex:1;overflow-y:auto;padding:0 16px calc(20px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:6px;-webkit-overflow-scrolling:touch;}
+.skin-picker-list::-webkit-scrollbar{width:5px;}
+.skin-picker-list::-webkit-scrollbar-thumb{background:rgba(120,80,255,.25);border-radius:99px;}
+.skin-picker-item{display:flex;align-items:center;gap:10px;width:100%;padding:11px 14px;border-radius:14px;border:1px solid rgba(120,80,255,.12);background:rgba(255,255,255,.45);color:var(--text-main);font-family:inherit;font-size:11.5px;cursor:pointer;text-align:left;letter-spacing:.2px;transition:all .25s cubic-bezier(.34,1.56,.64,1);}
+.skin-picker-item:hover{background:rgba(120,80,255,.14);border-color:rgba(120,80,255,.28);transform:translateX(2px);}
+.skin-picker-item-name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;}
+.skin-picker-item-count{flex:none;font-size:9px;font-weight:700;padding:3px 9px;border-radius:99px;background:rgba(120,80,255,.13);color:var(--c1);font-variant-numeric:tabular-nums;letter-spacing:.2px;}
+.skin-picker-item.active{background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;border-color:transparent;box-shadow:0 8px 22px -10px var(--c1);}
+.skin-picker-item.active .skin-picker-item-count{background:rgba(255,255,255,.26);color:#fff;}
+.skin-picker-empty{grid-column:1/-1;padding:34px 10px;text-align:center;color:var(--text-sub);font-size:11px;opacity:.6;}
+
+.disclaimer{max-width:540px;margin:14px auto 0;padding:14px 17px;background:linear-gradient(150deg,var(--glass-top),var(--glass-bot));backdrop-filter:blur(30px) saturate(220%);-webkit-backdrop-filter:blur(30px) saturate(220%);border:1px solid rgba(255,255,255,.65);border-radius:19px;color:var(--text-sub);font-size:10px;line-height:1.85;letter-spacing:.2px;box-shadow:0 16px 40px -28px rgba(80,60,140,.5),inset 0 1px 0 rgba(255,255,255,.7),inset 0 -1px 0 rgba(255,255,255,.2);}
+.disclaimer strong{font-weight:800;background:linear-gradient(100deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.footer-copyright{max-width:540px;margin:22px auto 0;padding:16px 0 6px;text-align:center;border-top:1px solid rgba(120,80,255,.1);}
+.footer-copyright .line{display:inline-block;padding:7px 20px;border-radius:100px;background:linear-gradient(150deg,var(--glass-top),var(--glass-bot));backdrop-filter:blur(30px) saturate(220%);-webkit-backdrop-filter:blur(30px) saturate(220%);border:1px solid rgba(255,255,255,.7);box-shadow:0 10px 30px -20px rgba(80,60,140,.5),inset 0 1px 0 rgba(255,255,255,.75),inset 0 -1px 0 rgba(255,255,255,.2);}
+.footer-copyright .line span{font-size:10px;font-weight:600;color:var(--text-sub);letter-spacing:1.2px;}
+.footer-copyright .line .year,.footer-copyright .line .brand{font-weight:800;background:linear-gradient(100deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.footer-wish{text-align:center;padding:14px 0 2px;color:var(--text-sub);opacity:.6;font-size:10px;font-weight:600;letter-spacing:2.2px;}
+.footer-wish i{opacity:.4;margin:0 4px;}
+
+.about-item{display:flex;align-items:center;gap:13px;padding:13px 16px;border-radius:16px;background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.58);margin-bottom:9px;text-decoration:none;color:var(--text-main);transition:all .25s cubic-bezier(.34,1.56,.64,1);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 -1px 0 rgba(255,255,255,.2);}
+.about-item:hover{background:rgba(255,255,255,.72);transform:translateX(3px);box-shadow:0 10px 30px -18px rgba(80,60,140,.5),inset 0 1px 0 rgba(255,255,255,.7);}
+.about-item:active{transform:scale(.98);}
+.about-item-icon{width:38px;height:38px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;font-size:16px;box-shadow:0 6px 18px -8px var(--c1);}
+.about-item-text{flex:1;min-width:0;}
+.about-item-title{font-size:12px;font-weight:700;color:var(--text-main);letter-spacing:.2px;}
+.about-item-desc{font-size:10.5px;color:var(--text-sub);margin-top:2px;}
+.about-item-arrow{color:var(--text-sub);opacity:.5;font-size:12px;flex-shrink:0;}
+.about-info{font-size:11.5px;line-height:2;color:var(--text-sub);}
+.about-info strong{color:var(--text-main);font-weight:700;display:inline-block;width:50px;}
+
+.sw-search{display:flex;gap:8px;}
+.sw-search input{flex:1;min-width:0;height:42px;padding:0 15px;border-radius:14px;background:rgba(120,80,255,.08);border:1px solid rgba(120,80,255,.16);color:var(--text-main);font-size:12px;font-family:inherit;outline:none;transition:border-color .3s,background .3s,box-shadow .3s;}
+.sw-search input::placeholder{color:var(--text-sub);opacity:.55;}
+.sw-search input:focus{border-color:var(--c1);background:rgba(120,80,255,.13);box-shadow:0 0 0 4px var(--glow);}
+.sw-search button{flex:none;width:46px;height:42px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;font-size:13px;cursor:pointer;box-shadow:0 10px 24px -10px var(--c1);transition:transform .28s cubic-bezier(.34,1.56,.64,1),filter .25s;}
+.sw-search button:hover{filter:brightness(1.08);}
+.sw-search button:active{transform:scale(.93);}
+body.dark .sw-search input{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);}
+
+.sw-list{max-height:420px;overflow-y:auto;margin-top:10px;padding-right:2px;}
+.sw-list::-webkit-scrollbar{width:5px;}
+.sw-list::-webkit-scrollbar-thumb{background:rgba(120,80,255,.25);border-radius:99px;}
+.sw-item{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:15px;margin-bottom:6px;background:rgba(255,255,255,.32);border:1px solid rgba(255,255,255,.48);cursor:pointer;transition:background .25s,border-color .25s,transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.18);}
+.sw-item:hover{background:rgba(255,255,255,.62);transform:translateX(2px);box-shadow:0 8px 22px -16px rgba(80,60,140,.6),inset 0 1px 0 rgba(255,255,255,.7);}
+.sw-item.on{background:linear-gradient(100deg,rgba(120,80,255,.16),rgba(120,80,255,.06));border-color:var(--c1);box-shadow:0 0 0 1px var(--glow),inset 0 1px 0 rgba(255,255,255,.5);}
+body.dark .sw-item{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.08);}
+body.dark .sw-item:hover{background:rgba(255,255,255,.1);}
+.sw-item-cover{width:44px;height:44px;border-radius:11px;flex:none;overflow:hidden;background:linear-gradient(135deg,rgba(120,80,255,.2),rgba(120,80,255,.08));display:flex;align-items:center;justify-content:center;color:var(--c1);font-size:14px;position:relative;}
+.sw-item-cover img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.sw-item-meta{flex:1;min-width:0;}
+.sw-item-title{font-size:11.5px;font-weight:600;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sw-item-artist{font-size:10.5px;color:var(--text-sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
+.sw-item-acts{display:flex;gap:2px;flex:none;}
+.sw-icon{width:32px;height:32px;border-radius:10px;border:none;background:none;color:var(--text-sub);font-size:11.5px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:color .22s,background .22s,transform .22s;font-family:inherit;}
+.sw-icon:hover{color:var(--c1);background:rgba(120,80,255,.12);}
+.sw-icon:active{transform:scale(.88);}
+.sw-icon.act{color:#ff6b9d;}
+.sw-empty{text-align:center;padding:34px 16px;color:var(--text-sub);font-size:11px;opacity:.65;}
+
+.sw-player{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px) + 58px);transform:translateX(-50%) translateY(22px) scale(.95);width:min(540px,calc(100vw - 32px));z-index:96;border-radius:24px;overflow:hidden;background:linear-gradient(150deg,var(--glass-top),var(--glass-bot));backdrop-filter:blur(52px) saturate(240%);-webkit-backdrop-filter:blur(52px) saturate(240%);border:1px solid rgba(255,255,255,.78);box-shadow:0 30px 76px -28px rgba(80,60,140,.78),0 5px 16px -8px rgba(80,60,140,.32),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.32);opacity:0;visibility:hidden;transition:transform .55s cubic-bezier(.34,1.4,.5,1),opacity .35s,visibility .35s;}
+.sw-player::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.95),transparent);pointer-events:none;}
+.sw-player::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(120% 60% at 50% 0%,rgba(255,255,255,.14),transparent 60%);}
+.sw-player.up{transform:translateX(-50%) translateY(0) scale(1);opacity:1;visibility:visible;}
+body.dark .sw-player{border-color:rgba(255,255,255,.12);}
+.sw-top{position:relative;display:flex;align-items:center;gap:11px;padding:12px 14px 9px;}
+.sw-cover{width:46px;height:46px;border-radius:50%;flex:none;overflow:hidden;background:conic-gradient(from 0deg,rgba(120,80,255,.28),rgba(120,80,255,.08),rgba(120,80,255,.28));display:flex;align-items:center;justify-content:center;color:var(--c1);font-size:15px;box-shadow:0 0 0 2px rgba(255,255,255,.55),0 6px 18px -10px var(--c1);position:relative;transition:box-shadow .4s;}
+.sw-cover img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+.sw-cover i{position:relative;z-index:1;}
+.sw-cover.playing{animation:coverPulse 2.2s ease-in-out infinite;}
+.sw-info{flex:1;min-width:0;}
+.sw-title{font-size:12px;font-weight:700;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sw-artist{font-size:10px;color:var(--text-sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
+.sw-ctrls{display:flex;align-items:center;gap:4px;flex:none;}
+.sw-ctrls button{width:34px;height:34px;border-radius:50%;border:none;background:none;color:var(--text-sub);font-size:12.5px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:color .22s,background .22s,transform .25s cubic-bezier(.34,1.56,.64,1);font-family:inherit;}
+.sw-ctrls button:hover{color:var(--c1);background:rgba(120,80,255,.1);}
+.sw-ctrls button:active{transform:scale(.88);}
+.sw-ctrls .sw-play{width:42px;height:42px;background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;font-size:14px;box-shadow:0 10px 24px -10px var(--c1),inset 0 1px 0 rgba(255,255,255,.35);}
+.sw-ctrls .sw-play:hover{color:#fff;filter:brightness(1.08);}
+.sw-seek{position:relative;display:flex;align-items:center;gap:9px;padding:0 14px 10px;font-size:9.5px;color:var(--text-sub);font-variant-numeric:tabular-nums;}
+.sw-seek>span{width:32px;text-align:center;flex:none;letter-spacing:.2px;}
+.sw-track{flex:1;height:4px;border-radius:99px;background:rgba(120,80,255,.18);position:relative;cursor:pointer;touch-action:none;}
+.sw-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--c1),var(--c2));position:relative;transition:width .12s linear;box-shadow:0 0 10px -2px var(--c1);}
+.sw-fill::after{content:'';position:absolute;right:-5px;top:50%;width:10px;height:10px;border-radius:50%;background:#fff;transform:translateY(-50%) scale(0);box-shadow:0 1px 5px rgba(0,0,0,.3),0 0 0 3px var(--glow);transition:transform .25s cubic-bezier(.34,1.56,.64,1);}
+.sw-track:hover .sw-fill::after{transform:translateY(-50%) scale(1);}
+.sw-foot{display:flex;align-items:center;gap:10px;padding:0 16px 12px;}
+.sw-vol{display:flex;align-items:center;gap:7px;flex:1;min-width:0;}
+.sw-vol i{font-size:9.5px;color:var(--text-sub);opacity:.7;flex:none;}
+.sw-vol-track{flex:1;max-width:110px;height:3px;border-radius:99px;background:rgba(120,80,255,.18);cursor:pointer;position:relative;touch-action:none;}
+.sw-vol-fill{height:100%;width:72%;border-radius:99px;background:linear-gradient(90deg,var(--c1),var(--c2));}
+.sw-tagline{font-size:9px;color:var(--text-sub);opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.3px;max-width:60%;}
+
+@media (max-width:480px){
+  .page{padding:60px 14px 210px;}
+  .glass{padding:16px;border-radius:20px;}
+  .export-row{grid-template-columns:1fr 1fr;gap:6px;}
+  .export-btn:last-child{grid-column:span 2;}
+  .header h1{letter-spacing:-.2px;}
+  .skin-picker-box{max-height:82vh;}
+}
+@media (max-width:380px){
+  .export-btn{font-size:10px;padding:9px 6px;}
+  .skin-picker-list{padding:0 13px calc(18px + env(safe-area-inset-bottom,0px));}
+  .skin-picker-search-wrap{padding:0 17px 10px;}
+  .skin-picker-search-icon{left:29px;}
+  .skin-picker-search-clear{right:28px;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important;}
+}
+
+/* ================= Apple 风格覆盖 ================= */
+html{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;}
+body{
+  --bg-base:#f2f2f7; --bg-card:rgba(255,255,255,.72);
+  --text-main:#1c1c1e; --text-sub:#6e6e73;
+  --c1:#007aff; --c2:#0a84ff; --glow:rgba(0,122,255,.16);
+  --glass-top:rgba(255,255,255,.92); --glass-bot:rgba(255,255,255,.66);
+  background:#f2f2f7;
+}
+body.dark{
+  --bg-base:#000000; --bg-card:rgba(28,28,30,.72);
+  --text-main:#f5f5f7; --text-sub:#98989f;
+  --glass-top:rgba(44,44,46,.82); --glass-bot:rgba(28,28,30,.6);
+  --glow:rgba(10,132,255,.25);
+}
+body.dark .glass,body.dark .login-card,body.dark .panel,body.dark .dock,body.dark .color-panel,body.dark .corner-btn{border-color:rgba(255,255,255,.1);}
+
+.glass{background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:20px;
+  box-shadow:0 1px 2px rgba(0,0,0,.04),0 10px 30px -16px rgba(0,0,0,.14);}
+body.dark .glass{background:#1c1c1e;}
+
+.header h1{background:none;-webkit-background-clip:initial;background-clip:initial;color:var(--text-main);text-shadow:none;font-weight:800;}
+.header .badge{background:#fff;border-color:rgba(0,0,0,.06);color:var(--text-sub);box-shadow:none;}
+body.dark .header .badge{background:#1c1c1e;}
+.header .badge i{color:#007aff;}
+.header .pill{background:#fff;border-color:rgba(0,0,0,.06);box-shadow:none;color:var(--text-sub);}
+body.dark .header .pill{background:#1c1c1e;}
+.header .pill strong{background:none;-webkit-background-clip:initial;color:#007aff;}
+.section-title::before{background:#007aff;box-shadow:none;}
+
+.btn{background:#007aff;background-size:auto;box-shadow:0 8px 20px -10px rgba(0,122,255,.5);border-radius:12px;letter-spacing:0;}
+.btn::after{display:none;}
+.btn:hover{filter:brightness(1.05);}
+
+.login-card{background:#fff;border:none;border-radius:24px;
+  box-shadow:0 24px 60px -24px rgba(0,0,0,.28);}
+body.dark .login-card{background:#1c1c1e;}
+.login-logo{width:64px;height:64px;margin:0 auto 14px;border-radius:20px;
+  background:linear-gradient(135deg,#007aff,#0a84ff);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+  box-shadow:0 12px 28px -12px rgba(0,122,255,.55);}
+.login-title{background:none;-webkit-background-clip:initial;color:var(--text-main);}
+.login-sub{color:var(--text-sub);}
+.login-input{background:#f2f2f7;border:1px solid transparent;border-radius:12px;text-align:left;letter-spacing:0;color:var(--text-main);}
+body.dark .login-input{background:#2c2c2e;}
+.login-input:focus{border-color:#007aff;background:#f2f2f7;box-shadow:0 0 0 4px rgba(0,122,255,.16);}
+.login-btn{background:#007aff;background-size:auto;border-radius:12px;letter-spacing:0;box-shadow:0 10px 24px -12px rgba(0,122,255,.6);}
+.auth-seg{display:flex;background:#f2f2f7;border-radius:12px;padding:3px;margin:6px 0 16px;}
+body.dark .auth-seg{background:#2c2c2e;}
+.auth-seg-btn{flex:1;padding:8px;border:none;background:transparent;color:#6e6e73;font-family:inherit;font-size:13px;font-weight:600;border-radius:9px;cursor:pointer;transition:all .2s;}
+.auth-seg-btn.active{background:#fff;color:#1c1c1e;box-shadow:0 1px 4px rgba(0,0,0,.12);}
+body.dark .auth-seg-btn.active{background:#48484a;color:#f5f5f7;}
+.auth-msg{min-height:16px;margin:10px 2px 0;font-size:11.5px;line-height:1.5;}
+.auth-msg.err{color:#ff3b30;}
+.auth-msg.ok{color:#34c759;}
+
+.toggle.on{background:#34c759;box-shadow:none;}
+.skin-tab.active{background:#007aff;box-shadow:0 6px 16px -8px rgba(0,122,255,.6);}
+.skin-select-icon{background:#007aff;box-shadow:none;}
+input[type=range]::-webkit-slider-thumb{background:#007aff;box-shadow:0 1px 4px rgba(0,0,0,.25);}
+.panel-item.active{background:rgba(0,122,255,.1);box-shadow:inset 3px 0 0 #007aff;}
+.panel-item:hover{background:rgba(0,122,255,.08);}
+.panel-item:hover i,.panel-item.active i{color:#007aff;}
+
+.dock,.panel,.color-panel,.corner-btn{background:rgba(255,255,255,.86);border-color:rgba(0,0,0,.06);}
+body.dark .dock,body.dark .panel,body.dark .color-panel,body.dark .corner-btn{background:rgba(44,44,46,.85);}
+.dock-dot{background:#007aff;box-shadow:none;}
+
+.footer-icp{text-align:center;padding:8px 0 2px;color:var(--text-sub);opacity:.7;font-size:10px;letter-spacing:.5px;}
+
+
+/* ===== 二轮：背景光晕 / 弹窗 / 遮罩 中性化 ===== */
+html,body{background:#f2f2f7;}
+body.dark,body.dark html{background:#000;}
+body::before{background:radial-gradient(65vw 55vw at 50% -10%,rgba(0,122,255,.07),transparent 70%),radial-gradient(55vw 55vw at 105% 105%,rgba(0,122,255,.05),transparent 72%);}
+body.dark body::before{background:radial-gradient(65vw 55vw at 50% -10%,rgba(10,132,255,.12),transparent 70%);}
+
+.login{background:rgba(242,242,247,.6);}
+body.dark .login{background:rgba(0,0,0,.6);}
+.logout-page{background:rgba(0,0,0,.28);}
+.skin-picker-overlay{background:rgba(0,0,0,.35);}
+
+.update-modal{background:rgba(0,0,0,.32);}
+.update-modal-box{background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:22px;box-shadow:0 30px 70px -28px rgba(0,0,0,.35);}
+body.dark .update-modal-box{background:#1c1c1e;border-color:rgba(255,255,255,.1);}
+.update-modal-box h3{background:none;-webkit-background-clip:initial;color:var(--text-main);animation:none;}
+.update-content li::before{color:#007aff;}
+.update-close-btn{background:#007aff;background-size:auto;box-shadow:0 8px 20px -10px rgba(0,122,255,.5);animation:none;letter-spacing:0;}
+
+</style>
+</head>
+<body>
+
+<div id="bgLayer"></div>
+<canvas id="fx"></canvas>
+
+<div class="update-modal" id="updateModal">
+  <div class="update-modal-box">
+    <h3>✦ 更新日志 ✦</h3>
+    <ul class="update-content">
+      <li>新增九儿—可妮兔、艾伦—布朗熊、莉莉—莎莉、阿念—蛙里奥皮肤代码</li>
+      <li>新增栓动狙击枪—晚安好梦、桃木剑—羽落星尘、葫芦—小熊镜子皮肤代码</li>
+      <li>新增粘液球—莎莉的下午茶、夜视仪—花间泪、电击枪—绮梦烛台皮肤代码</li>
+      <li>新增急救包—萌兔掌机、除颤仪—甜趣手偶、折扇—花溯双生皮肤代码</li>
+      <li>新增铲子—蛙里奥铲皮肤代码</li>
+    </ul>
+    <button class="update-close-btn" id="closeUpdateBtn">知道了</button>
+  </div>
+</div>
+
+<div class="logout-page hidden" id="logoutPage">
+  <div class="logout-box">
+    <div class="logout-icon"><i class="fas fa-sign-out-alt"></i></div>
+    <div class="logout-title">确认退出登录</div>
+    <div class="logout-desc">退出后需要重新登录才能继续使用，确定要退出吗？</div>
+    <div class="logout-actions">
+      <button class="logout-cancel" id="logoutCancelBtn">取消</button>
+      <button class="logout-confirm" id="logoutConfirmBtn">确认退出</button>
+    </div>
+  </div>
+</div>
+
+<div class="login" id="login">
+  <div class="login-card">
+    <div class="login-logo"><i class="fas fa-swatchbook"></i></div>
+    <div class="login-title">超自然 · 皮肤代码库</div>
+    <div class="login-sub">苏苏皮肤代码 · 全角色收录</div>
+    <div class="auth-seg" id="authSeg">
+      <button type="button" class="auth-seg-btn active" data-mode="login">登录</button>
+      <button type="button" class="auth-seg-btn" data-mode="register">注册</button>
+    </div>
+    <form id="authForm" novalidate>
+      <input id="authEmail" class="login-input" type="email" autocomplete="email" placeholder="邮箱" inputmode="email">
+      <input id="authPassword" class="login-input" type="password" autocomplete="current-password" placeholder="密码" style="margin-top:11px">
+      <input id="authPassword2" class="login-input" type="password" autocomplete="new-password" placeholder="确认密码" style="margin-top:11px;display:none">
+      <div class="auth-msg" id="authMsg"></div>
+      <button id="authBtn" class="login-btn" type="submit">登录</button>
+    </form>
+    <div class="login-note">邮箱注册 / 登录 · 数据经 Supabase 认证服务校验</div>
+  </div>
+</div>
+
+<div id="app" hidden>
+
+  <div class="corner-actions">
+    <button class="corner-btn palette-btn" id="paletteBtn" aria-label="配色">
+      <span class="palette-grad"></span>
+    </button>
+  </div>
+
+  <div class="color-panel" id="colorPanel">
+    <div class="color-panel-title">渐变主题</div>
+    <div class="color-panel-grid" id="cpGradients"></div>
+    <div class="color-panel-divider"></div>
+    <div class="color-panel-title">单色主题</div>
+    <div class="color-panel-colors" id="cpColors"></div>
+  </div>
+
+  <main class="pages" id="pages">
+
+    <section class="page active" data-page="skincode">
+      <div class="header">
+        <div class="badge"><i class="fas fa-star"></i> skin code</div>
+        <h1>超自然 · 皮肤代码库</h1>
+        <div class="sub">全角色收录</div>
+        <div class="meta-row">
+          <span class="pill"><i class="fas fa-calendar"></i> 更新 <strong>2026.11.19</strong></span>
+          <span class="pill"><i class="fas fa-user"></i> 员工 <strong id="totalSkinCount">0</strong> 款</span>
+          <span class="pill"><i class="fas fa-cube"></i> 道具 <strong id="totalItemCount">0</strong> 款</span>
+        </div>
+      </div>
+
+      <div class="glass">
+        <div class="section-title">类型</div>
+        <div class="skin-tabs" id="skinTypeTabs">
+          <button class="skin-tab active" data-type="character">员工皮肤</button>
+          <button class="skin-tab" data-type="item">道具皮肤</button>
+        </div>
+
+        <div class="section-title" style="margin-top:16px;">选择</div>
+        <button class="skin-select-trigger" id="skinSelectTrigger">
+          <span class="skin-select-icon"><i class="fas fa-search"></i></span>
+          <span class="skin-select-value placeholder" id="skinSelectValue">— 请选择角色 —</span>
+          <span class="skin-select-arrow">▾</span>
+        </button>
+
+        <div class="skin-stat-bar">
+          <span><i class="fas fa-crosshairs"></i> 当前：<strong id="skinCurrentName">未选择</strong></span>
+          <span><i class="fas fa-layer-group"></i> 皮肤：<strong id="skinCurrentCount">0</strong></span>
+        </div>
+
+        <div class="export-row">
+          <button class="export-btn" id="exportCharBtn"><i class="fas fa-user"></i> 导出员工</button>
+          <button class="export-btn" id="exportItemBtn"><i class="fas fa-cube"></i> 导出道具</button>
+          <button class="export-btn" id="exportAllBtn"><i class="fas fa-download"></i> 导出全部</button>
+        </div>
+      </div>
+
+      <div class="glass" id="skinList">
+        <div class="skin-empty">请选择角色查看皮肤代码</div>
+      </div>
+
+      <div class="disclaimer">
+        <strong>免责声明：</strong>所有皮肤资源仅为玩家学习交流使用，仅供个人娱乐场景。仅供个人交流学习，严禁用于任何违法犯罪用途，请遵守当地法律法规，合理合法地使用本应用。使用者的行为与本应用、作者无关，作者不对使用者的任何行为承担法律责任。禁止用于商业盈利、违规篡改游戏客户端等违反游戏用户协议及法律法规的行为。本站不承担任何账号封禁、设备故障、法律追责等相关责任。如资源侵权，请联系频道主下架处理。
+      </div>
+
+      <div class="footer-copyright">
+        <div class="line">
+          <span>✦ © <span class="year">2026</span> · <span class="brand">苏苏皮肤代码</span> ✦</span>
+        </div>
+      </div>
+      <div class="footer-wish">♡ 玫瑰无需长高，爱者自会弯腰 ♡</div>
+      <div class="footer-icp">沪ICP备2026088888号-1</div>
+    </section>
+
+    <section class="page" data-page="music">
+      <div class="header">
+        <div class="badge"><i class="fas fa-music"></i> music</div>
+        <h1>云间音乐</h1>
+        <div class="sub">三条线路 · 搜歌即听</div>
+      </div>
+
+      <div class="glass">
+        <div class="section-title">搜索</div>
+        <div class="sw-search">
+          <input id="swQuery" type="search" placeholder="搜歌手、歌名，回车开始" autocomplete="off">
+          <button id="swGo" aria-label="搜索"><i class="fas fa-magnifying-glass"></i></button>
+        </div>
+
+        <div class="section-title" style="margin-top:16px;">线路</div>
+        <div class="skin-tabs" id="swLines"></div>
+      </div>
+
+      <div class="glass">
+        <div class="skin-tabs" id="swTabs">
+          <button class="skin-tab active" data-tab="search">搜索结果</button>
+          <button class="skin-tab" data-tab="fav">我的收藏</button>
+          <button class="skin-tab" data-tab="hist">播放记录</button>
+        </div>
+        <div id="swList" class="sw-list"></div>
+      </div>
+    </section>
+
+    <section class="page" data-page="settings">
+      <div class="header">
+        <div class="badge"><i class="fas fa-sliders"></i> settings</div>
+        <h1>设置</h1>
+        <div class="sub">视觉与偏好</div>
+      </div>
+
+      <div class="glass">
+        <div class="setting-row">
+          <div>
+            <label>夜间模式</label>
+            <div class="setting-sub">切换深色 / 浅色主题</div>
+          </div>
+          <div class="toggle" id="darkModeToggle"></div>
+        </div>
+      </div>
+
+      <div class="glass">
+        <div class="setting-row">
+          <div>
+            <label>雪花粒子</label>
+            <div class="setting-sub">背景飘落效果</div>
+          </div>
+          <div class="toggle on" id="particleToggle"></div>
+        </div>
+        <div class="setting-row">
+          <div>
+            <label>鼠标光晕</label>
+            <div class="setting-sub">跟随指针的柔光</div>
+          </div>
+          <div class="toggle on" id="glowToggle"></div>
+        </div>
+        <div class="setting-row">
+          <div>
+            <label>点击音效</label>
+            <div class="setting-sub">按钮与游戏反馈音</div>
+          </div>
+          <div class="toggle on" id="soundToggle"></div>
+        </div>
+        <div class="range-wrap">
+          <div class="range-head">
+            <label>粒子数量</label>
+            <span class="range-value" id="particleCountVal">40</span>
+          </div>
+          <input type="range" min="10" max="120" value="40" id="particleCount">
+        </div>
+        <div class="range-wrap">
+          <div class="range-head">
+            <label>毛玻璃强度</label>
+            <span class="range-value" id="blurVal">46px</span>
+          </div>
+          <input type="range" min="12" max="80" value="46" id="blurSlider">
+        </div>
+      </div>
+
+      <div class="glass">
+        <div class="setting-row">
+          <div>
+            <label>粒子形态</label>
+            <div class="setting-sub">选择飘落效果样式</div>
+          </div>
+        </div>
+        <div class="skin-tabs" id="particleShapes" style="margin-top:8px;"></div>
+      </div>
+
+      <div class="glass">
+        <div class="setting-row">
+          <div>
+            <label>背景图</label>
+            <div class="setting-sub" id="bgStatus">未设置</div>
+          </div>
+        </div>
+        <div class="bg-presets" id="bgPresets"></div>
+        <input class="bg-url-input" id="bgUrlInput" placeholder="粘贴图片直链 https://...">
+        <button class="btn" id="bgUrlApply"><span class="btn-text">应用此 URL</span></button>
+        <button class="btn" id="bgUrlClear"><span class="btn-text">清除背景</span></button>
+      </div>
+
+      <div class="glass">
+        <div class="setting-row">
+          <div>
+            <label>播放器设置</label>
+            <div class="setting-sub">音量、循环、倍速、频谱</div>
+          </div>
+        </div>
+        <div class="range-wrap">
+          <div class="range-head">
+            <label>音量</label>
+            <span class="range-value" id="swVolVal">72%</span>
+          </div>
+          <input type="range" min="0" max="100" value="72" id="swVol">
+        </div>
+        <div class="setting-row">
+          <div>
+            <label>循环方式</label>
+            <div class="setting-sub">列表 / 单曲 / 随机</div>
+          </div>
+          <div class="skin-tabs" id="swRepeat" style="margin:0;">
+            <button class="skin-tab" data-repeat="list">列表</button>
+            <button class="skin-tab" data-repeat="one">单曲</button>
+            <button class="skin-tab" data-repeat="shuffle">随机</button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div>
+            <label>实时频谱</label>
+            <div class="setting-sub">播放时显示律动</div>
+          </div>
+          <div class="toggle on" id="swViz"></div>
+        </div>
+        <div class="setting-row">
+          <div>
+            <label>数据概况</label>
+            <div class="setting-sub"><span id="swStatFav">0</span> 首收藏 · <span id="swStatHist">0</span> 条记录</div>
+          </div>
+        </div>
+        <button class="btn" id="swClearFav" style="margin-top:12px;"><span class="btn-text">清空全部收藏</span></button>
+      </div>
+
+      <div class="glass">
+        <div class="setting-row">
+          <div>
+            <label>账号管理</label>
+            <div class="setting-sub">退出当前登录账号</div>
+          </div>
+        </div>
+        <button class="btn" id="logoutBtn"><span class="btn-text">退出登录</span></button>
+      </div>
+    </section>
+
+    <section class="page" data-page="about">
+      <div class="header">
+        <div class="badge"><i class="fas fa-circle-info"></i> about</div>
+        <h1>关于我们</h1>
+        <div class="sub">苏苏皮肤代码 · 超自然行动组</div>
+      </div>
+
+      <div class="glass">
+        <div class="about-info">
+          <div><strong>作者</strong>苏苏</div>
+          <div><strong>项目</strong>超自然皮肤代码库</div>
+          <div><strong>定位</strong>超自然行动组皮肤代码查询工具</div>
+          <div><strong>功能</strong>皮肤代码查询 · 一键复制 · 批量导出</div>
+          <div><strong>音乐</strong>云间音乐 · 三条线路</div>
+        </div>
+      </div>
+
+      <div class="glass">
+        <div class="section-title">联系我们</div>
+        <a class="about-item" href="https://t.me/susui520" target="_blank" rel="noopener">
+          <div class="about-item-icon"><i class="fab fa-telegram-plane"></i></div>
+          <div class="about-item-text">
+            <div class="about-item-title">云间苏小苑</div>
+            <div class="about-item-desc">Telegram 频道 · @susui520</div>
+          </div>
+          <i class="fas fa-chevron-right about-item-arrow"></i>
+        </a>
+      </div>
+
+      <div class="glass">
+        <div class="section-title">数据文件</div>
+        <a class="about-item" href="%E8%B6%85%E8%87%AA%E7%84%B6%E7%9A%AE%E8%82%A4%E4%BB%A3%E7%A0%81%E5%BA%93_%E5%AE%8C%E6%95%B4%E8%A7%A3%E6%9E%90.json" download="超自然皮肤代码库_完整解析.json">
+          <div class="about-item-icon"><i class="fas fa-file-code"></i></div>
+          <div class="about-item-text">
+            <div class="about-item-title">超自然皮肤代码库_完整解析.json</div>
+            <div class="about-item-desc">完整结构化数据（JSON）</div>
+          </div>
+          <i class="fas fa-download about-item-arrow"></i>
+        </a>
+        <a class="about-item" href="%E5%85%A8%E9%83%A8%E7%9A%AE%E8%82%A4%E4%BB%A3%E7%A0%81.txt" download="全部皮肤代码.txt">
+          <div class="about-item-icon"><i class="fas fa-file-lines"></i></div>
+          <div class="about-item-text">
+            <div class="about-item-title">全部皮肤代码.txt</div>
+            <div class="about-item-desc">员工 + 道具合并纯文本</div>
+          </div>
+          <i class="fas fa-download about-item-arrow"></i>
+        </a>
+        <a class="about-item" href="%E5%91%98%E5%B7%A5%E7%9A%AE%E8%82%A4%E4%BB%A3%E7%A0%81.txt" download="员工皮肤代码.txt">
+          <div class="about-item-icon"><i class="fas fa-user"></i></div>
+          <div class="about-item-text">
+            <div class="about-item-title">员工皮肤代码.txt</div>
+            <div class="about-item-desc">员工皮肤代码纯文本</div>
+          </div>
+          <i class="fas fa-download about-item-arrow"></i>
+        </a>
+        <a class="about-item" href="%E9%81%93%E5%85%B7%E7%9A%AE%E8%82%A4%E4%BB%A3%E7%A0%81.txt" download="道具皮肤代码.txt">
+          <div class="about-item-icon"><i class="fas fa-cube"></i></div>
+          <div class="about-item-text">
+            <div class="about-item-title">道具皮肤代码.txt</div>
+            <div class="about-item-desc">道具皮肤代码纯文本</div>
+          </div>
+          <i class="fas fa-download about-item-arrow"></i>
+        </a>
+      </div>
+      <p class="footer-wish" style="margin-top:18px;">苏苏皮肤代码 · 用心做点好东西</p>
+    </section>
+
+  </main>
+
+  <div class="panel" id="panelDown"></div>
+
+  <div class="dock-wrap">
+    <div class="dock" id="dock">
+      <span class="dock-dot"></span>
+      <span class="dock-label">菜单</span>
+      <svg class="dock-arrow" viewBox="0 0 24 24">
+        <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor"
+              stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+
+</div>
+
+<div class="sw-player" id="swPlayer">
+  <div class="sw-top">
+    <div class="sw-cover" id="swCover"><i class="fas fa-music"></i></div>
+    <div class="sw-info">
+      <div class="sw-title" id="swTitle">还没开始听</div>
+      <div class="sw-artist" id="swArtist">上面搜一首，或者切条线路试试</div>
+    </div>
+    <div class="sw-ctrls">
+      <button id="swPrev" aria-label="上一首"><i class="fas fa-backward-step"></i></button>
+      <button id="swToggle" class="sw-play" aria-label="播放暂停"><i class="fas fa-play"></i></button>
+      <button id="swNext" aria-label="下一首"><i class="fas fa-forward-step"></i></button>
+    </div>
+  </div>
+  <div class="sw-seek">
+    <span id="swNow">0:00</span>
+    <div class="sw-track" id="swTrack"><div class="sw-fill" id="swFill"></div></div>
+    <span id="swAll">0:00</span>
+  </div>
+  <div class="sw-foot">
+    <div class="sw-vol">
+      <i class="fas fa-volume-low" id="swVolIcon"></i>
+      <div class="sw-vol-track" id="swVolTrack"><div class="sw-vol-fill" id="swVolFill"></div></div>
+    </div>
+    <div class="sw-tagline" id="swLineTag"></div>
+  </div>
+</div>
+
+<div class="skin-picker-overlay" id="skinPickerOverlay">
+  <div class="skin-picker-box">
+    <div class="skin-picker-handle"></div>
+    <div class="skin-picker-header">
+      <span class="skin-picker-title"><span id="skinPickerTitle">选择角色</span><span class="skin-picker-total" id="skinPickerTotal">0</span></span>
+      <button class="skin-picker-close" id="skinPickerClose">✕</button>
+    </div>
+    <div class="skin-picker-search-wrap">
+      <i class="fas fa-search skin-picker-search-icon"></i>
+      <input class="skin-picker-search" id="skinPickerSearch" type="search" autocomplete="off" placeholder="搜索名称...">
+      <button class="skin-picker-search-clear" id="skinPickerSearchClear">✕</button>
+    </div>
+    <div class="skin-picker-list" id="skinPickerList"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+var STORAGE_KEY='yy_login_qq';
+var BG_KEY='yy_bg_url';
+var THEME_KEY='yy_dark_mode';
+var PALETTE_KEY='yy_palette_scheme';
+var SOUND_KEY='yy_sound_on';
+var PARTICLE_SHAPE_KEY='yy_particle_shape';
+
+var DEFAULT_AVATAR='data:image/svg+xml;utf8,'+
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'+
+  '<rect width="100" height="100" fill="%23181a22"/>'+
+  '<circle cx="50" cy="38" r="17" fill="%23444a58"/>'+
+  '<ellipse cx="50" cy="88" rx="30" ry="22" fill="%23444a58"/>'+
+  '</svg>';
+
+function $(id){return document.getElementById(id);}
+function avatarUrl(qq,s){return 'https://q1.qlogo.cn/g?b=qq&nk='+qq+'&s='+(s||640);}
+
+function hexToRgb(h){
+  h=h.replace('#','');
+  if(h.length===3)h=h.split('').map(function(c){return c+c;}).join('');
+  return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];
+}
+function rgbToHex(r,g,b){
+  return '#'+[r,g,b].map(function(v){return Math.round(v).toString(16).padStart(2,'0');}).join('');
+}
+function mixColor(a,b,t){
+  var A=hexToRgb(a),B=hexToRgb(b);
+  return rgbToHex(A[0]+(B[0]-A[0])*t,A[1]+(B[1]-A[1])*t,A[2]+(B[2]-A[2])*t);
+}
+
+var soundOn=localStorage.getItem(SOUND_KEY)!=='false';
+var audioCtx=null;
+function ensureAudioCtx(){
+  if(!audioCtx){
+    try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}
+    catch(e){return null;}
+  }
+  if(audioCtx.state==='suspended')audioCtx.resume().catch(function(){});
+  return audioCtx;
+}
+function playSound(name){
+  if(!soundOn)return;
+  var ctx=ensureAudioCtx();
+  if(!ctx)return;
+  var presets={
+    click:{type:'sine',notes:[{f:720,t:0,d:0.06,v:0.05}]},
+    pop:{type:'sine',notes:[{f:700,t:0,d:0.05,v:0.06},{f:1100,t:0.04,d:0.06,v:0.05}]},
+    success:{type:'sine',notes:[{f:523,t:0,d:0.12,v:0.06},{f:659,t:0.08,d:0.12,v:0.06},{f:784,t:0.16,d:0.2,v:0.07}]},
+    error:{type:'square',notes:[{f:220,t:0,d:0.16,v:0.04}]}
+  };
+  var p=presets[name]||presets.click;
+  var now=ctx.currentTime;
+  p.notes.forEach(function(n){
+    var osc=ctx.createOscillator();
+    var gain=ctx.createGain();
+    osc.type=p.type;
+    osc.frequency.setValueAtTime(n.f,now+n.t);
+    gain.gain.setValueAtTime(0,now+n.t);
+    gain.gain.linearRampToValueAtTime(n.v,now+n.t+0.008);
+    gain.gain.exponentialRampToValueAtTime(0.0001,now+n.t+n.d);
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.start(now+n.t);osc.stop(now+n.t+n.d+0.05);
+  });
+}
+document.addEventListener('pointerdown',function(){ensureAudioCtx();},{once:true});
+var lastSoundTime=0;
+document.addEventListener('click',function(e){
+  if(!soundOn)return;
+  var t=e.target;
+  if(t.closest('input')||t.closest('textarea'))return;
+  var clickable=t.closest('button, a, [role="button"]');
+  if(!clickable)return;
+  var now=Date.now();
+  if(now-lastSoundTime<30)return;
+  lastSoundTime=now;
+  playSound('click');
+},true);
+
+var COLOR_SCHEMES=[
+  {name:'苏苏紫',c1:'#8b7bf7',c2:'#a78bfa'},
+  {name:'蓝紫',c1:'#4F86FF',c2:'#A98BFF'},
+  {name:'粉蓝',c1:'#FF9DAE',c2:'#6FB6FF'},
+  {name:'珊瑚',c1:'#FF8FB0',c2:'#FFAE7B'},
+  {name:'薄荷',c1:'#8FE0A6',c2:'#7FE3D4'},
+  {name:'暖阳',c1:'#FFD782',c2:'#FFAE7B'},
+  {name:'薰衣草',c1:'#A98BFF',c2:'#E7A0E4'},
+  {name:'湖水',c1:'#7FE3D4',c2:'#6FB6FF'},
+  {name:'桃粉',c1:'#F5A8D0',c2:'#FF9DAE'},
+  {name:'青柠',c1:'#8FE0A6',c2:'#FFD782'},
+  {name:'星河',c1:'#638BFF',c2:'#A26BFF'},
+  {name:'晨曦',c1:'#FFB784',c2:'#FFF182'},
+  {name:'深海',c1:'#2C5F8A',c2:'#4F86FF'},
+  {name:'玫瑰',c1:'#E878B8',c2:'#FF96B4'},
+  {name:'极光',c1:'#4CDBFF',c2:'#84FF9E'},
+  {name:'暗夜',c1:'#3A3F5C',c2:'#638BFF'}
+];
+var SOLID_COLORS=[
+  '#8b7bf7','#4F86FF','#6FB6FF','#A9D4FF','#7FE3D4','#8FE0A6',
+  '#4CDBFF','#FFD782','#FFAE7B','#FF9DAE','#F5A8D0','#E878B8',
+  '#FF96B4','#A98BFF','#A26BFF','#638BFF','#84FF9E','#FFF182'
+];
+var currentScheme=localStorage.getItem(PALETTE_KEY)||'0';
+var currentSolidColor=null;
+
+function updateColorPanelSelection(){
+  var gradBox=$('cpGradients');
+  var colBox=$('cpColors');
+  if(!gradBox||!colBox)return;
+  Array.prototype.forEach.call(gradBox.children,function(el,i){
+    el.classList.toggle('selected',String(i)===currentScheme);
+  });
+  Array.prototype.forEach.call(colBox.children,function(el){
+    el.classList.toggle('selected',el.dataset.color===currentSolidColor);
+  });
+}
+function setScheme(index){
+  var s=COLOR_SCHEMES[index];
+  if(!s)return;
+  currentScheme=String(index);
+  currentSolidColor=null;
+  localStorage.setItem(PALETTE_KEY,currentScheme);
+  var rgb=hexToRgb(s.c1);
+  document.body.style.setProperty('--c1',s.c1);
+  document.body.style.setProperty('--c2',s.c2);
+  document.body.style.setProperty('--glow','rgba('+rgb[0]+','+rgb[1]+','+rgb[2]+',.28)');
+  updateColorPanelSelection();
+}
+function applySolidColor(c1){
+  var c2=mixColor(c1,'#ffffff',0.46);
+  var rgb=hexToRgb(c1);
+  currentSolidColor=c1;
+  currentScheme='solid:'+c1;
+  localStorage.setItem(PALETTE_KEY,currentScheme);
+  document.body.style.setProperty('--c1',c1);
+  document.body.style.setProperty('--c2',c2);
+  document.body.style.setProperty('--glow','rgba('+rgb[0]+','+rgb[1]+','+rgb[2]+',.28)');
+  updateColorPanelSelection();
+}
+function buildColorPanel(){
+  var gradBox=$('cpGradients');
+  var colBox=$('cpColors');
+  if(!gradBox||!colBox)return;
+  gradBox.innerHTML='';
+  COLOR_SCHEMES.forEach(function(s,i){
+    var b=document.createElement('button');
+    b.type='button';b.className='cp-swatch';
+    b.style.background='linear-gradient(135deg,'+s.c1+','+s.c2+')';
+    b.title=s.name;
+    b.addEventListener('click',function(){setScheme(i);});
+    gradBox.appendChild(b);
+  });
+  colBox.innerHTML='';
+  SOLID_COLORS.forEach(function(c){
+    var b=document.createElement('button');
+    b.type='button';b.className='cp-swatch';
+    b.dataset.color=c;b.style.background=c;
+    b.addEventListener('click',function(){applySolidColor(c);});
+    colBox.appendChild(b);
+  });
+}
+
+var bgLayer=$('bgLayer');
+var BG_PRESETS=[
+  {name:'晨雾森林',url:'https://picsum.photos/seed/mistwoods/1080/1920'},
+  {name:'极光之夜',url:'https://picsum.photos/seed/auroranight/1080/1920'},
+  {name:'静谧湖畔',url:'https://picsum.photos/seed/lakecalm/1080/1920'},
+  {name:'云海日出',url:'https://picsum.photos/seed/sunrisecloud/1080/1920'},
+  {name:'紫色花海',url:'https://picsum.photos/seed/violetfield/1080/1920'},
+  {name:'城市霓虹',url:'https://picsum.photos/seed/neoncity7/1080/1920'},
+  {name:'雪松山谷',url:'https://picsum.photos/seed/snowpine/1080/1920'},
+  {name:'粉色晚霞',url:'https://picsum.photos/seed/pinksky22/1080/1920'},
+  {name:'星空银河',url:'https://picsum.photos/seed/galaxyway/1080/1920'},
+  {name:'樱色浪漫',url:'https://picsum.photos/seed/sakurapink/1080/1920'},
+  {name:'深蓝海岸',url:'https://picsum.photos/seed/deepcoast/1080/1920'},
+  {name:'暖阳麦田',url:'https://picsum.photos/seed/wheatgold/1080/1920'},
+  {name:'青绿山谷',url:'https://picsum.photos/seed/greenvale/1080/1920'}
+];
+function markSelectedBg(url){
+  var box=$('bgPresets');
+  if(!box)return;
+  Array.prototype.forEach.call(box.children,function(t){
+    t.classList.toggle('selected',t.dataset.url===url);
+  });
+}
+function applyBg(url){
+  var status=$('bgStatus');
+  if(!status)return;
+  if(!url){
+    bgLayer.classList.remove('on');
+    bgLayer.style.backgroundImage='';
+    status.textContent='未设置';
+    markSelectedBg('');
+    return;
+  }
+  status.textContent='加载中…';
+  var probe=new Image();
+  probe.onload=function(){
+    bgLayer.style.backgroundImage='url('+JSON.stringify(url)+')';
+    bgLayer.classList.add('on');
+    var preset=BG_PRESETS.find(function(p){return p.url===url;});
+    status.textContent=preset?('当前：'+preset.name):'当前：自定义';
+    markSelectedBg(url);
+  };
+  probe.onerror=function(){
+    status.textContent='加载失败';
+    alert('图片加载失败，请确认 URL 是直链且允许跨域访问');
+  };
+  probe.src=url;
+}
+function buildBgPresets(){
+  var box=$('bgPresets');
+  if(!box)return;
+  box.innerHTML='';
+  BG_PRESETS.forEach(function(p){
+    var b=document.createElement('button');
+    b.type='button';b.className='bg-thumb';
+    b.dataset.url=p.url;
+    b.style.backgroundImage='url('+JSON.stringify(p.url)+')';
+    var label=document.createElement('span');
+    label.className='bg-thumb-label';
+    label.textContent=p.name;
+    b.appendChild(label);
+    b.addEventListener('click',function(){
+      localStorage.setItem(BG_KEY,p.url);
+      $('bgUrlInput').value='';
+      applyBg(p.url);
+    });
+    box.appendChild(b);
+  });
+}
+function initBg(){
+  buildBgPresets();
+  var saved=localStorage.getItem(BG_KEY)||'';
+  if(saved){
+    $('bgUrlInput').value=saved;
+    applyBg(saved);
+  }
+  $('bgUrlApply').addEventListener('click',function(){
+    var url=$('bgUrlInput').value.trim();
+    if(!url){alert('请输入图片 URL');return;}
+    if(!/^https?:\/\//i.test(url)){alert('请输入以 http:// 或 https:// 开头的直链');return;}
+    localStorage.setItem(BG_KEY,url);
+    applyBg(url);
+  });
+  $('bgUrlClear').addEventListener('click',function(){
+    localStorage.removeItem(BG_KEY);
+    $('bgUrlInput').value='';
+    applyBg('');
+  });
+}
+
+/* ===== Supabase 认证配置：把下面两项换成你 Supabase 项目的 URL 与 anon key ===== */
+var SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
+var SUPABASE_ANON_KEY = "YOUR-ANON-KEY";
+
+var sbClient = null;
+if (window.supabase && SUPABASE_URL.indexOf("YOUR-PROJECT") === -1) {
+  sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+}
+
+var loginEl=$('login');
+var app=$('app');
+var authMode='login';
+var authForm=$('authForm');
+var authEmail=$('authEmail');
+var authPassword=$('authPassword');
+var authPassword2=$('authPassword2');
+var authMsg=$('authMsg');
+var authBtn=$('authBtn');
+
+function enterApp(user,instant){
+  app.hidden=false;
+  if(user){ try{localStorage.setItem('yy_user_email',user.email||'');}catch(e){} }
+  if(instant){
+    loginEl.style.display='none';
+    loginEl.classList.add('hidden');
+  }else{
+    loginEl.classList.add('hidden');
+    setTimeout(function(){loginEl.style.display='none';},600);
+  }
+}
+function showLogin(){
+  loginEl.style.display='';
+  loginEl.classList.remove('hidden');
+  setAuthMode('login');
+}
+function setAuthMode(mode){
+  authMode=mode;
+  Array.prototype.forEach.call(document.querySelectorAll('#authSeg .auth-seg-btn'),function(b){
+    b.classList.toggle('active',b.dataset.mode===mode);
+  });
+  authPassword2.style.display = mode==='register' ? '' : 'none';
+  authBtn.textContent = mode==='register' ? '注册' : '登录';
+  authMsg.textContent='';
+}
+function setMsg(text,isErr){
+  authMsg.textContent=text||'';
+  authMsg.className='auth-msg'+(isErr?' err':' ok');
+}
+function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+async function handleAuth(e){
+  e.preventDefault();
+  var email=authEmail.value.trim();
+  var pass=authPassword.value;
+  if(!validEmail(email)){ setMsg('请输入正确的邮箱地址',true); authEmail.focus(); return; }
+  if(pass.length<6){ setMsg('密码至少 6 位',true); authPassword.focus(); return; }
+  if(authMode==='register'){
+    if(pass!==authPassword2.value){ setMsg('两次输入的密码不一致',true); authPassword2.focus(); return; }
+  }
+  if(!sbClient){ setMsg('认证服务未配置：请在 index.html 顶部填入 Supabase URL 与 anon key',true); return; }
+  authBtn.disabled=true; authBtn.textContent='请稍候…';
+  try{
+    if(authMode==='register'){
+      var r=await sbClient.auth.signUp({email:email,password:pass});
+      if(r.error) throw r.error;
+      if(r.data&&r.data.session){ enterApp(r.data.user,false); }
+      else { setMsg('注册成功，请先到邮箱完成验证，再回来登录',false); setAuthMode('login'); }
+    }else{
+      var l=await sbClient.auth.signInWithPassword({email:email,password:pass});
+      if(l.error) throw l.error;
+      enterApp(l.data.user,false);
+    }
+  }catch(err){
+    setMsg(err&&err.message?err.message:'登录失败，请重试',true);
+  }finally{
+    authBtn.disabled=false;
+    if(authMode==='register')authBtn.textContent='注册'; else authBtn.textContent='登录';
+  }
+}
+function bindAuth(){
+  Array.prototype.forEach.call(document.querySelectorAll('#authSeg .auth-seg-btn'),function(b){
+    b.addEventListener('click',function(){ setAuthMode(b.dataset.mode); });
+  });
+  authForm.addEventListener('submit',handleAuth);
+}
+bindAuth();
+
+var pages=Array.prototype.slice.call(document.querySelectorAll('.page'));
+function goTo(pid){
+  pages.forEach(function(p){
+    p.classList.toggle('active',p.dataset.page===pid);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.panel-item'),function(it){
+    it.classList.toggle('active',it.dataset.page===pid);
+  });
+  closePanel();
+  var cp=$('colorPanel');
+  if(cp)cp.classList.remove('open');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+var dock=$('dock');
+var panelDown=$('panelDown');
+function openPanel(){panelDown.classList.add('open');dock.classList.add('active');}
+function closePanel(){panelDown.classList.remove('open');dock.classList.remove('active');}
+function togglePanel(){if(panelDown.classList.contains('open'))closePanel();else openPanel();}
+
+function initDock(){
+  var startY=0,moved=false;
+  dock.addEventListener('pointerdown',function(e){
+    startY=e.clientY;moved=false;
+    try{dock.setPointerCapture(e.pointerId);}catch(err){}
+  });
+  dock.addEventListener('pointermove',function(e){
+    if(Math.abs(e.clientY-startY)>8)moved=true;
+  });
+  dock.addEventListener('pointerup',function(e){
+    var dy=e.clientY-startY;
+    if(!moved||Math.abs(dy)<8)togglePanel();
+    else if(dy<-30)openPanel();
+    else if(dy>30)closePanel();
+    startY=0;moved=false;
+  });
+
+  var items=[
+    {id:'skincode',label:'皮肤代码',icon:'fa-swatchbook'},
+    {id:'music',label:'云间音乐',icon:'fa-music'},
+    {id:'settings',label:'设置',icon:'fa-sliders'},
+    {id:'about',label:'关于我们',icon:'fa-circle-info'}
+  ];
+  panelDown.innerHTML='';
+  items.forEach(function(item,i){
+    var b=document.createElement('button');
+    b.className='panel-item'+(i===0?' active':'');
+    b.dataset.page=item.id;
+    b.style.setProperty('--i',i);
+    b.innerHTML='<i class="fas '+item.icon+'"></i><span>'+item.label+'</span>';
+    b.addEventListener('click',function(){goTo(item.id);});
+    panelDown.appendChild(b);
+  });
+}
+
+document.addEventListener('pointerdown',function(e){
+  if(!dock.contains(e.target)&&!panelDown.contains(e.target))closePanel();
+},true);
+
+var canvas=$('fx');
+var ctx=canvas.getContext('2d');
+var W=0,H=0,particles=[];
+var particleOn=true,particleNum=40,glowOn=true;
+var particleShape=localStorage.getItem(PARTICLE_SHAPE_KEY)||'snow';
+var mouse={x:-999,y:-999};
+var isDark=false;
+
+function resizeCanvas(){
+  var dpr=Math.min(window.devicePixelRatio||1,1.5);
+  W=window.innerWidth;H=window.innerHeight;
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+window.addEventListener('resize',resizeCanvas);
+resizeCanvas();
+
+function createParticle(){
+  return {
+    x:Math.random()*W,y:Math.random()*H-H,
+    r:Math.random()*1.6+0.5,
+    vy:Math.random()*0.45+0.2,vx:(Math.random()-0.5)*0.2,
+    a:Math.random()*0.32+0.2,
+    phase:Math.random()*Math.PI*2,
+    rot:Math.random()*Math.PI*2,
+    rotSpeed:(Math.random()-0.5)*0.018
+  };
+}
+window.addEventListener('pointermove',function(e){mouse.x=e.clientX;mouse.y=e.clientY;},{passive:true});
+window.addEventListener('pointerleave',function(){mouse.x=-999;mouse.y=-999;});
+
+function drawParticle(p,shape){
+  var col=isDark?'255,255,255':'120,90,220';
+  ctx.save();
+  ctx.translate(p.x,p.y);
+  ctx.rotate(p.rot);
+  if(shape==='snow'){
+    ctx.beginPath();ctx.arc(0,0,p.r,0,Math.PI*2);
+    ctx.fillStyle='rgba('+col+','+p.a+')';ctx.fill();
+  }else if(shape==='star'){
+    ctx.beginPath();
+    var spikes=4,outerR=p.r*1.7,innerR=p.r*0.7;
+    for(var i=0;i<spikes*2;i++){
+      var r=i%2===0?outerR:innerR;
+      var angle=(i*Math.PI)/spikes-Math.PI/2;
+      var x=Math.cos(angle)*r,y=Math.sin(angle)*r;
+      if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+    }
+    ctx.closePath();ctx.fillStyle='rgba('+col+','+p.a+')';ctx.fill();
+  }else if(shape==='bubble'){
+    ctx.beginPath();ctx.arc(0,0,p.r*1.15,0,Math.PI*2);
+    ctx.strokeStyle='rgba('+col+','+(p.a*0.55)+')';
+    ctx.lineWidth=0.7;ctx.stroke();
+  }else if(shape==='leaf'){
+    ctx.beginPath();ctx.ellipse(0,0,p.r*0.65,p.r*1.3,0,0,Math.PI*2);
+    ctx.fillStyle='rgba('+col+','+p.a+')';ctx.fill();
+  }else{
+    ctx.beginPath();ctx.arc(0,0,p.r*0.55,0,Math.PI*2);
+    ctx.fillStyle='rgba('+col+','+(p.a*1.15)+')';ctx.fill();
+  }
+  ctx.restore();
+}
+
+function particleLoop(){
+  ctx.clearRect(0,0,W,H);
+  if(glowOn&&mouse.x>-500){
+    var g=ctx.createRadialGradient(mouse.x,mouse.y,0,mouse.x,mouse.y,180);
+    g.addColorStop(0,isDark?'rgba(255,255,255,.05)':'rgba(140,110,255,.08)');
+    g.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  }
+  if(particleOn){
+    while(particles.length<particleNum)particles.push(createParticle());
+    if(particles.length>particleNum)particles.length=particleNum;
+    for(var i=0;i<particles.length;i++){
+      var p=particles[i];
+      p.phase+=0.012;p.rot+=p.rotSpeed;
+      p.x+=p.vx+Math.sin(p.phase)*0.16;
+      p.y+=p.vy;
+      if(particleShape==='bubble'){
+        p.y-=p.vy*1.5;
+        if(p.y<-20){particles[i]=createParticle();particles[i].y=H+10;continue;}
+      }
+      if(particleShape!=='bubble'&&(p.y>H+10||p.x<-20||p.x>W+20)){
+        particles[i]=createParticle();particles[i].y=-10;continue;
+      }
+      drawParticle(p,particleShape);
+    }
+  }
+  requestAnimationFrame(particleLoop);
+}
+particleLoop();
+
+var SHAPES=[
+  {id:'snow',label:'雪花'},{id:'star',label:'星星'},
+  {id:'bubble',label:'气泡'},{id:'leaf',label:'花瓣'},{id:'dot',label:'光点'}
+];
+function buildShapeButtons(){
+  var box=$('particleShapes');
+  if(!box)return;
+  box.innerHTML='';
+  SHAPES.forEach(function(s){
+    var b=document.createElement('button');
+    b.className='skin-tab'+(s.id===particleShape?' active':'');
+    b.textContent=s.label;
+    b.dataset.shape=s.id;
+    b.addEventListener('click',function(){
+      particleShape=s.id;
+      localStorage.setItem(PARTICLE_SHAPE_KEY,s.id);
+      Array.prototype.forEach.call(box.children,function(x){
+        x.classList.toggle('active',x.dataset.shape===s.id);
+      });
+      particles=[];
+    });
+    box.appendChild(b);
+  });
+}
+buildShapeButtons();
+
+var themeIsDark=localStorage.getItem(THEME_KEY)==='dark';
+function applyTheme(isDarkTheme){
+  themeIsDark=isDarkTheme;
+  document.body.classList.toggle('dark',isDarkTheme);
+  isDark=isDarkTheme;
+  var dt=$('darkModeToggle');
+  if(dt)dt.classList.toggle('on',isDarkTheme);
+  localStorage.setItem(THEME_KEY,isDarkTheme?'dark':'light');
+  var meta=document.querySelector('meta[name="theme-color"]');
+  if(meta)meta.setAttribute('content',isDarkTheme?'#0d0720':'#efe6ff');
+}
+function initTheme(){
+  applyTheme(themeIsDark);
+  var dt=$('darkModeToggle');
+  if(dt)dt.addEventListener('click',function(){applyTheme(!themeIsDark);});
+}
+
+function initSettings(){
+  $('particleToggle').addEventListener('click',function(){
+    particleOn=!particleOn;
+    this.classList.toggle('on',particleOn);
+  });
+  $('glowToggle').addEventListener('click',function(){
+    glowOn=!glowOn;
+    this.classList.toggle('on',glowOn);
+  });
+  $('soundToggle').addEventListener('click',function(){
+    soundOn=!soundOn;
+    this.classList.toggle('on',soundOn);
+    localStorage.setItem(SOUND_KEY,String(soundOn));
+    if(soundOn)playSound('pop');
+  });
+  $('particleCount').addEventListener('input',function(){
+    particleNum=Number(this.value);
+    $('particleCountVal').textContent=particleNum;
+  });
+  $('blurSlider').addEventListener('input',function(){
+    var v=this.value;
+    document.body.style.setProperty('--blur',v+'px');
+    $('blurVal').textContent=v+'px';
+  });
+  $('logoutBtn').addEventListener('click',function(){
+    $('logoutPage').classList.remove('hidden');
+  });
+  $('logoutCancelBtn').addEventListener('click',function(){
+    $('logoutPage').classList.add('hidden');
+  });
+  $('logoutConfirmBtn').addEventListener('click',async function(){
+    try{ if(sbClient) await sbClient.auth.signOut(); }catch(e){}
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem('yy_user_email');
+    location.reload();
+  });
+  if(soundOn)$('soundToggle').classList.add('on');
+}
+
+var SKIN_DATA={
+  "小黄":[
+    {"n":"原皮","c":"头 20000002 脸 20000004 身 20000007"},
+    {"n":"遗失的童话","c":"头 20000259 脸 20000260 身 20000258"},
+    {"n":"霓裳踏雪","c":"头 20000244 脸 20000245 身 20000243"},
+    {"n":"青丘一梦","c":"头 20000218 脸 20000229 身 20000210"},
+    {"n":"罗丽","c":"头 20000285 脸 20000286 身 20000287"},
+    {"n":"异色序曲","c":"头 20000329 脸 20000330 身 20000328"},
+    {"n":"呱呱雨衣","c":"头 20000318 脸 20000319 身 20000317"},
+    {"n":"炽天使","c":"头 20000420 脸 20000421 身 20000419"},
+    {"n":"中华小厨娘","c":"头 20000490 脸 20000491 身 20000492"},
+    {"n":"花之圆舞曲","c":"头 20000543 脸 20000544 身 20000542"},
+    {"n":"捣蛋鬼","c":"头 20000579 脸 20000580 身 20000578"},
+    {"n":"火线先锋","c":"头 20000211 身 20000201"},
+    {"n":"后室幸存者","c":"身 200024"},
+    {"n":"午后卡其","c":"身 20000204"},
+    {"n":"淡蓝牛仔","c":"身 20000205"},
+    {"n":"青苔绿","c":"身 200005"},
+    {"n":"孔雀绿","c":"身 200015"},
+    {"n":"宝石红","c":"身 200016"},
+    {"n":"牛仔蓝","c":"身 200017"},
+    {"n":"素雅白","c":"身 200018"}
+  ],
+  "爱丽丝":[
+    {"n":"原皮","c":"头 20000010 脸 20000011 身 20000012"},
+    {"n":"血色中的玛丽","c":"头 20000233 脸 20000234 身 20000232"},
+    {"n":"瑞羽衔春","c":"头 20000251 脸 20000252 身 20000250"},
+    {"n":"冰公主","c":"头 20000278 脸 20000279 身 20000280"},
+    {"n":"丝缕哀歌","c":"头 20000273 脸 20000277 身 20000272"},
+    {"n":"甜梦派对","c":"头 20000339 脸 20000340 身 20000341"},
+    {"n":"耀眼的你","c":"头 20000423 脸 20000424 身 20000425"},
+    {"n":"梨花诗","c":"头 20006090 脸 20006091 身 20006092","e":"[额外形态]20006093"},
+    {"n":"林黛玉","c":"头 20000520 脸 20000521 身 20000540"},
+    {"n":"企鹅嘟嘟","c":"头 20000569 脸 20000570 身 20000571"},
+    {"n":"春日心情","c":"头 20000212 身 20000202"},
+    {"n":"薯牌甜心","c":"头 20000231 身 20000230"},
+    {"n":"宁静青空","c":"头 20000214 身 20000206"},
+    {"n":"纯黑咖啡","c":"头 20000215 身 20000207"}
+  ],
+  "零":[
+    {"n":"原皮","c":"头 20000013 脸 20000014 身 20000015"},
+    {"n":"赤炼将军","c":"脸 20000238 身 20000239"},
+    {"n":"青云逸歌","c":"头 20000265 脸 20000266 身 20000267"},
+    {"n":"搬开山","c":"头 20000405 脸 20000406 身 20000407"},
+    {"n":"渡鸦公爵","c":"头 20000412 脸 20000413 身 20000411"},
+    {"n":"磨砺成锋","c":"头 20000457 脸 20000458 身 20000459"},
+    {"n":"狡","c":"头 20000508 脸 20000509 身 20000507"},
+    {"n":"鬼王","c":"头 20006108 脸 20006109 身 20006110"},
+    {"n":"清风入袖","c":"头 20001905 脸 20001906 身 20001907"},
+    {"n":"卡皮巴拉","c":"头 20000213 身 20000203"},
+    {"n":"荒野落日","c":"头 20000216 身 20000208"},
+    {"n":"罗宾汉","c":"头 20000217 身 20000209"}
+  ],
+  "阿念":[
+    {"n":"原皮","c":"头 20000501 脸 20000502 身 20000503"},
+    {"n":"灵昭鹿鸣","c":"头 20000241 脸 20000242 身 20000240"},
+    {"n":"王子与骑士","c":"头 20000263 脸 20000264 身 20000262"},
+    {"n":"迷途僵宝","c":"头 20000321 脸 20000322 身 20000320"},
+    {"n":"庆宴绮愿","c":"头 20000429 脸 20000430 身 20000431"},
+    {"n":"寻星记","c":"头 20006077 脸 20006078 身 20006076"},
+    {"n":"橙留香","c":"头 20006116 脸 20006117 身 20006118","e":"[额外形态]20006119"},
+    {"n":"丹砂","c":"身 20000235"},
+    {"n":"铅灰","c":"身 20000236"},{"n":"蛙里奥","c":"头 20006154 脸 20006155 身 20006156","e":"[额外形态]20006157"}
+  ],
+  "逍遥":[
+    {"n":"原皮","c":"头 20000601 脸 20000602 身 20000603"},
+    {"n":"莲华渡","c":"头 20000333 脸 20000334 身 20000332"},
+    {"n":"泽引山海","c":"头 20000248 脸 20000249 身 20000247"},
+    {"n":"绣春逍影","c":"头 20006003 脸 20006004 身 20006002"},
+    {"n":"剑仙","c":"头 20006045 脸 20006046 身 20006047"},
+    {"n":"万迭云华","c":"头 20000474 脸 20000475 身 20000476"},
+    {"n":"菠萝吹雪","c":"头 20006086 脸 20006087 身 20006088","e":"[额外形态]20006089"},
+    {"n":"哪吒","c":"头 20000562 脸 20000563 身 20000564"},
+    {"n":"碧落","c":"身 20000246"},
+    {"n":"紫气","c":"身 20000253"}
+  ],
+  "薇薇安":[
+    {"n":"原皮","c":"头 20000701 脸 20000702 身 20000703"},
+    {"n":"黑月挽歌","c":"头 20000256 脸 20000257 身 20000255"},
+    {"n":"圣光之逾","c":"头 20000275 脸 20000276 身 20000274"},
+    {"n":"白光莹","c":"头 20000288 脸 20000289 身 20000290"},
+    {"n":"仙锋小姐","c":"头 20000402 脸 20000403 身 20000404"},
+    {"n":"沧海之遗紫","c":"头 20000442 脸 20000443 身 20000444"},
+    {"n":"沧海之遗粉","c":"头 20000445 脸 20000446 身 20000447"},
+    {"n":"海月息潮","c":"头 20000448 脸 20000449 身 20000450"},
+    {"n":"杜宾突击","c":"头 20006071 脸 20006072 身 20006070"},
+    {"n":"雪莉杨","c":"头 20006102 脸 20006103 身 20006104"},
+    {"n":"碧月砂歌","c":"头 20000550 脸 20000551 身 20000552"},
+    {"n":"铃兰","c":"衣服 20000254"}
+  ],
+  "巫铃儿":[
+    {"n":"原皮","c":"头 20000801 脸 20000802 身 20000803"},
+    {"n":"素影瑶光","c":"头 20000268 脸 20000269 身 20000270"},
+    {"n":"镜生遗梦红","c":"头 20000294 脸 20000295 身 20000296"},
+    {"n":"镜生遗梦白","c":"头 20000297 脸 20000298 身 20000299"},
+    {"n":"镜花辞","c":"头 20000314 脸 20000315 身 20000316"},
+    {"n":"琢玉怀乡","c":"头 20000451 脸 20000452 身 20000453"},
+    {"n":"九尾","c":"头 20000518 脸 20000517 身 20000516"},
+    {"n":"上官子怡","c":"头 20006120 脸 20006121 身 20006122","e":"[额外形态]20006123"},
+    {"n":"富江","c":"头 20006014 脸 20006015 身 20006016"},
+    {"n":"相思引","c":"身 20000261"}
+  ],
+  "莉莉":[
+    {"n":"原皮","c":"头 20000901 脸 20000902 身 20000903"},
+    {"n":"情公主","c":"头 20000281 脸 20000282 身 20000283"},
+    {"n":"捉妖小师妹","c":"头 20000324 脸 20000327 身 20000323"},
+    {"n":"莓果陷阱","c":"头 20006008 脸 20006009 身 20006007"},
+    {"n":"瑶台梦","c":"头 20000427 脸 20000428 身 20000426"},
+    {"n":"雪羽","c":"头 20000511 脸 20000512 身 20000510"},
+    {"n":"丹青若梦","c":"头 20006130 脸 20006131 身 20006132"},
+    {"n":"凤归澜金","c":"头 20006124 脸 20006125 身 20006126"},
+    {"n":"凤归澜红","c":"头 20006127 脸 20006128 身 20006129"},
+    {"n":"樱桃果酱","c":"身 20000271"},{"n":"莎莉","c":"头 20006158 脸 20006159 身 20006160","e":"[额外形态]20006161"}
+  ],
+  "艾伦":[
+    {"n":"原皮","c":"头 20001001 脸 20001002 身 20001003"},
+    {"n":"水王子","c":"头 20000291 脸 20000292 身 20000293"},
+    {"n":"绒绒对决","c":"头 20000342 脸 20000343 身 20000344"},
+    {"n":"黎明猎手","c":"头 20006028 脸 20006029 身 20006027"},
+    {"n":"星渊法则","c":"头 20000487 脸 20000488 身 20000486"},
+    {"n":"胡八一","c":"头 20006100 脸 20006101 身 20006099"},
+    {"n":"敖丙","c":"头 20000559 脸 20000560 身 20000561"},
+    {"n":"夜绯","c":"身 20000284"},{"n":"布朗熊","c":"头 20006150 脸 20006151 身 20006152","e":"[额外形态]20006153"}
+  ],
+  "爱德华":[
+    {"n":"原皮","c":"头 20001101 脸 20001102 身 20001103"},
+    {"n":"梵卓之礼","c":"头 20006033 脸 20006034 身 20006032"},
+    {"n":"福尔摩喵","c":"头 20006074 脸 20006075 身 20006073"},
+    {"n":"高泰明","c":"头 20000548 脸 20000549 身 20000547"},
+    {"n":"祖母绿","c":"身 20000335"}
+  ],
+  "兰":[
+    {"n":"原皮","c":"头 20001201 脸 20001202 身 20001203"},
+    {"n":"千夜星谕","c":"头 20000408 脸 20000409 身 20000410"},
+    {"n":"春之声","c":"头 20000433 脸 20000434 身 20000432"},
+    {"n":"扈江离","c":"头 20006084 脸 20006085 身 20006083"},
+    {"n":"精绝女王","c":"头 20006111 脸 20006112 身 20006113"},
+    {"n":"妲己","c":"头 20000556 脸 20000557 身 20000558"},
+    {"n":"靛月","c":"衣服 20000338"}
+  ],
+  "小满":[
+    {"n":"原皮","c":"头 20001301 脸 20001302 身 20001303"},
+    {"n":"燕燕于飞","c":"头 20000465 脸 20000466 身 20000467"},
+    {"n":"童话息语","c":"头 20000498 脸 20000499 身 20000497"},
+    {"n":"灵公主","c":"头 20000532 脸 20000533 身 20000531"},
+    {"n":"绛云","c":"头 20000418 身 20000417"}
+  ],
+  "临云":[
+    {"n":"原皮","c":"头 20001401 脸 20001402 身 20001403"},
+    {"n":"织锦云程","c":"头 20000454 脸 20000455 身 20000456"},
+    {"n":"赤鳞纪","c":"头 20000494 脸 20000495 身 20000493"},
+    {"n":"小龙女","c":"头 20000566 脸 20000567 身 20000565"},
+    {"n":"青岚","c":"身 20006048"}
+  ],
+  "月":[
+    {"n":"原皮","c":"头 20001501 脸 20001502 身 20001503"},
+    {"n":"龙马","c":"头 20000514 脸 20000515 身 20000513"},
+    {"n":"云台鹗","c":"头 20006081 脸 20006082 身 20006080"},
+    {"n":"贾宝玉","c":"头 20000523 脸 20000524 身 20000522"},
+    {"n":"丹红","c":"身 20006064"}
+  ],
+  "米娅":[
+    {"n":"原皮","c":"头 20001601 脸 20001602 身 20001603"},
+    {"n":"石楠的哀伤","c":"头 20006095 脸 20006096 身 20006094"},
+    {"n":"纯真不锈","c":"头 20000573 脸 20000574 身 20000572"},
+    {"n":"伯爵绿","c":"身 20006069"}
+  ],
+  "无心":[
+    {"n":"原皮","c":"头 20001701 脸 20001702 身 20001703"},
+    {"n":"陈玉楼","c":"头 20006105 脸 20006106 身 20006107"},
+    {"n":"霜枫照夜","c":"头 20000538 脸 20000539 身 20000537"},
+    {"n":"冷砂红","c":"身 20006098"}
+  ],
+  "九儿":[
+    {"n":"原皮","c":"头 20001801 脸 20001802 身 20001803"},
+    {"n":"冷漠罗丽","c":"头 20000534 脸 20000535 身 20000536"},
+    {"n":"霞光橙","c":"身 20006138"},{"n":"可妮兔","c":"头 20006146 脸 20006147 身 20006148","e":"[额外形态]20006149"}
+  ],
+  "白夜":[
+    {"n":"原皮","c":"头 20001901 脸 20001902 身 20001903"},
+    {"n":"双一","c":"头 20006017 脸 20006018 身 20006019"},
+    {"n":"永夜黑","c":"身 20006139"}
+  ],
+  "莫娜":[
+    {"n":"原皮","c":"头 20002001 脸 20002002 身 20002003"},
+    {"n":"天空蓝","c":"头 20006163 身 20006162"}
+  ]
+};
+
+var ITEM_DATA={
+  "专业手电":[
+    {"n":"原皮(局内)","c":"10002"},{"n":"原皮(局外)","c":"100002"},
+    {"n":"云端梦想计划","c":"5400201"},{"n":"星寂","c":"5400202"},
+    {"n":"花束般的告白","c":"5400203"},{"n":"月光明珠","c":"5400204"},
+    {"n":"宝莲灯","c":"5400205"}
+  ],
+  "铲子":[
+    {"n":"原皮(局内)","c":"10003"},{"n":"原皮(局外)","c":"100003"},
+    {"n":"焰骨","c":"5400301"},{"n":"龙鳞","c":"5400302"},
+    {"n":"圣心之泪","c":"5400303"},{"n":"卡皮巴拉小黄豚","c":"5400304"},
+    {"n":"赞萌波板糖","c":"5400305"},{"n":"撒拉弗的祷告","c":"5400308"},
+    {"n":"天青色","c":"5400310"},{"n":"小猪熊铲","c":"5400311"},{"n":"蛙里奥铲","c":"5400312"}
+  ],
+  "电击枪":[
+    {"n":"原皮(局内)","c":"10093"},{"n":"原皮(局外)","c":"100005"},
+    {"n":"甜蜜泡泡枪","c":"5400501"},{"n":"权杖的许诺","c":"5400502"},
+    {"n":"千击鬼葛","c":"5400503"},{"n":"精灵法杖","c":"5400504"},
+    {"n":"混天绫","c":"5400505"},{"n":"绮梦烛台","c":"5400506"}
+  ],
+  "黄牛能量饮料":[
+    {"n":"原皮(局内)","c":"10095"},{"n":"原皮(局外)","c":"100006"},
+    {"n":"青玉抱丹","c":"5400601"},{"n":"珍珠芭乐莓莓","c":"5400602"},
+    {"n":"雪顶奇愿","c":"5400603"},{"n":"无人岸","c":"5400604"},
+    {"n":"星空特调","c":"5400605"},{"n":"忘川夜昙","c":"5400606"},
+    {"n":"果味气泡饮","c":"5400607"},{"n":"星愿甜筒","c":"5400608"}
+  ],
+  "摸金符":[
+    {"n":"原皮(局内)","c":"10141"},{"n":"原皮(局外)","c":"100007"},
+    {"n":"花落精绝","c":"5400701"},{"n":"祝祷词","c":"5400702"},
+    {"n":"紫霄","c":"5400703"},{"n":"焦糖纪元","c":"5400704"},
+    {"n":"海洋之心","c":"5400705"},{"n":"摸金胡","c":"5400706"},
+    {"n":"雮尘珠之华","c":"5400707"},{"n":"天使喵","c":"5400708"}
+  ],
+  "音响":[
+    {"n":"原皮(局内)","c":"10164"},{"n":"原皮(局外)","c":"100009"},
+    {"n":"happy猫","c":"5400901"},{"n":"鸣沙鼓","c":"5400902"},
+    {"n":"冬夜暖忆","c":"5400903"},{"n":"咏叹调","c":"5400904"},
+    {"n":"月光奏鸣曲","c":"5400906"},{"n":"功德鼠","c":"5400907"},
+    {"n":"派对鸭鸭","c":"5400908"},{"n":"福鸣鼓","c":"5400909"},
+    {"n":"混沌钟","c":"5400910"}
+  ],
+  "传送按钮":[
+    {"n":"原皮(局内)","c":"10163"},{"n":"原皮(局外)","c":"100010"},
+    {"n":"幻宠之门","c":"5401001"},{"n":"昆仑镜","c":"5401002"},
+    {"n":"逆时审判","c":"5401004"},{"n":"浮生一梦","c":"5401005"},
+    {"n":"命运之轮","c":"5401006"},{"n":"归墟卦镜","c":"5401007"},
+    {"n":"复古相机","c":"5401003"}
+  ],
+  "短管猎枪":[
+    {"n":"原皮(局内)","c":"400005"},{"n":"原皮(局外)","c":"100011"},
+    {"n":"星光的裁决","c":"5401101"},{"n":"赞萌露比水枪","c":"5401102"},
+    {"n":"安魂曲","c":"5401103"},{"n":"玄凤翎","c":"5401104"}
+  ],
+  "猎枪子弹":[
+    {"n":"原皮(局内)","c":"450001"},{"n":"原皮(局外)","c":"100012"},
+    {"n":"星光的裁决","c":"5401201"},{"n":"赞萌露比水枪","c":"5401202"},
+    {"n":"安魂曲","c":"5401203"},{"n":"玄凤翎","c":"5401204"}
+  ],
+  "闪光弹":[
+    {"n":"原皮(局内)","c":"10260"},{"n":"原皮(局外)旧版","c":"100013"},
+    {"n":"原皮(局外)新版","c":"100072"},{"n":"金戈玄铜","c":"5401301"},
+    {"n":"邪恶滚滚猫","c":"5401302"},{"n":"金元豹","c":"5401305"},
+    {"n":"键帽星弹","c":"5407306"},{"n":"命许愿罐","c":"5407307"}
+  ],
+  "转轮手枪":[
+    {"n":"原皮(局内)","c":"10205"},{"n":"原皮(局外)","c":"100014"},
+    {"n":"新星时代","c":"5401401"},{"n":"对记忆执行死刑","c":"5401402"},
+    {"n":"呆猫八条","c":"5401403"}
+  ],
+  "夜视仪":[
+    {"n":"原皮(局内)","c":"10189"},{"n":"原皮(局外)","c":"100018"},
+    {"n":"金丝眼镜","c":"5401801"},{"n":"心跳眼镜","c":"5401802"},
+    {"n":"敛花容","c":"5401803"},{"n":"水镜游鳞","c":"5401804"},
+    {"n":"半框眼镜","c":"5401805"},{"n":"花间泪","c":"5401806"}
+  ],
+  "喷气背包":[
+    {"n":"原皮(局内)","c":"10188"},{"n":"原皮(局外)","c":"100019"},
+    {"n":"乘风溯雪","c":"5401901"},{"n":"晶澜灵翼","c":"5401902"},
+    {"n":"星棱幻翼","c":"5401903"},{"n":"云鸢锦绣","c":"5401904"},
+    {"n":"红莲披风","c":"5401905"}
+  ],
+  "除颤仪":[
+    {"n":"原皮(局内)","c":"10196"},{"n":"原皮(局外)","c":"100023"},
+    {"n":"弦外之音","c":"5402301"},{"n":"冰晶般的代价","c":"5402303"},
+    {"n":"招魂幡","c":"5402305"},{"n":"喵喵拳","c":"5402306"},{"n":"甜趣手偶","c":"5402307"}
+  ],
+  "急救包":[
+    {"n":"原皮(局内)","c":"10198"},{"n":"原皮(局外)","c":"100025"},
+    {"n":"蔷薇物语","c":"5402501"},{"n":"末章心跳","c":"5402502"},
+    {"n":"土拨鼠捏捏","c":"5402503"},{"n":"贴贴鸭鸭","c":"5402505"},{"n":"萌兔掌机","c":"5402507"}
+  ],
+  "刺刀":[
+    {"n":"原皮(局内)","c":"10201"},{"n":"原皮(局外)","c":"100027"},
+    {"n":"青瓷","c":"5402701"},{"n":"赤色之刃","c":"5402702"},
+    {"n":"小鲨匕首","c":"5402703"},{"n":"碧络琅环","c":"5402704"},
+    {"n":"紫气东来","c":"5402705"},{"n":"铂刺与红萼","c":"5402706"},
+    {"n":"美鲨匕首","c":"5402708"},{"n":"赤伶断幽","c":"5402709"},
+    {"n":"至死不渝","c":"5402710"}
+  ],
+  "葫芦":[
+    {"n":"原皮(局内)","c":"10207"},{"n":"原皮(局外)","c":"100028"},
+    {"n":"伏妖塔","c":"5402801"},{"n":"海心凝珠","c":"5402802"},
+    {"n":"嘟嘟刺豚","c":"5402803"},{"n":"小熊镜子","c":"5402804"}
+  ],
+  "腰包":[
+    {"n":"原皮(局内)","c":"10208"},{"n":"原皮(局外)","c":"100029"},
+    {"n":"绯红柴郡猫","c":"5402901"},{"n":"宝剑八","c":"5402903"},
+    {"n":"月下莲台","c":"5402904"},{"n":"惊魂娃娃","c":"5402905"},
+    {"n":"私藏的银河","c":"5402906"},{"n":"红运福龙","c":"5402907"},
+    {"n":"招财貔貅","c":"5402908"},{"n":"惊喜鸭鸭","c":"5402909"},
+    {"n":"摆烂喵","c":"5402910"}
+  ],
+  "额外背包":[
+    {"n":"原皮(局内)","c":"10209"},{"n":"原皮(局外)","c":"100030"},
+    {"n":"飞花令","c":"5403001"},{"n":"灵感泉之花","c":"5403002"},
+    {"n":"人鱼公主","c":"5403003"},{"n":"小猪熊","c":"5403004"}
+  ],
+  "桃木剑":[
+    {"n":"原皮(局内)","c":"10214"},{"n":"原皮(局外)","c":"100031"},
+    {"n":"永眠曲","c":"5403101"},{"n":"最后的独角兽","c":"5403102"},
+    {"n":"凤鸣九天","c":"5403103"},{"n":"绯色遗证","c":"5403104"},
+    {"n":"寂潮之刃","c":"5403105"},{"n":"小羊波德莱尔剑","c":"5403108"},
+    {"n":"分水剑","c":"5403109"},{"n":"羽落星尘","c":"5403110"}
+  ],
+  "长鞭":[
+    {"n":"原皮(局内)","c":"10215"},{"n":"原皮(局外)","c":"100032"},
+    {"n":"小狗蛇点点鞭","c":"5403201"},{"n":"飞天绫","c":"5403203"},
+    {"n":"缚誓之锁","c":"5403205"},{"n":"新春炸响","c":"5403206"},
+    {"n":"断罪之霆","c":"5403207"},{"n":"西皓青狼","c":"5403208"},
+    {"n":"打神鞭","c":"5403209"}
+  ],
+  "长枪":[
+    {"n":"原皮(局内)","c":"10217"},{"n":"原皮(局外)","c":"100034"},
+    {"n":"罪棘","c":"5403401"},{"n":"波塞冬","c":"5403402"},
+    {"n":"糖葫芦霸王枪","c":"5403403"},{"n":"苍澜笔豪","c":"5403404"},
+    {"n":"火尖枪","c":"5403405"}
+  ],
+  "折扇":[
+    {"n":"原皮(局内)","c":"10243"},{"n":"原皮(局外)","c":"100058"},
+    {"n":"露露扇","c":"5405801"},{"n":"赴此良宵","c":"5405802"},
+    {"n":"北辰玄麒","c":"5405803"},{"n":"秋露白","c":"5405804"},{"n":"花溯双生","c":"5405805"}
+  ],
+  "伞":[
+    {"n":"原皮(局内)","c":"10248"},{"n":"原皮(局外)","c":"100060"},
+    {"n":"沐春颂","c":"5406001"},{"n":"郁金春信","c":"5406002"},
+    {"n":"小刘鸭伞","c":"5406003"},{"n":"金刚伞","c":"5406004"},
+    {"n":"黑天鹅悖论","c":"5406005"}
+  ],
+  "诱饵弹":[
+    {"n":"原皮(局内)","c":"10264"},{"n":"原皮(局外)","c":"100073"},
+    {"n":"青翠小夜曲","c":"5407301"},{"n":"番天印","c":"5407302"},
+    {"n":"迪斯科球","c":"5407303"}
+  ],
+  "爆炸弓":[
+    {"n":"原皮(局内)","c":"10265"},{"n":"原皮(局外)","c":"100074"},
+    {"n":"凌云志","c":"5407401"},{"n":"心弦所向","c":"5407402"},
+    {"n":"镇邪弓","c":"5407404"},{"n":"命长风","c":"5407405"}
+  ],
+  "粘液球":[
+    {"n":"原皮(局内)","c":"10266"},{"n":"原皮(局外)","c":"100026"},
+    {"n":"泡澡鸭鸭","c":"5407403"},{"n":"尸香魔芋花包","c":"5408101"},
+    {"n":"糯米团","c":"5408102"},{"n":"莎莉的下午茶","c":"5408103"}
+  ],
+  "应急针":[
+    {"n":"原皮(局内)","c":"10269"},{"n":"原皮(局外)","c":"100076"},
+    {"n":"珍珠奶茶","c":"5407601"},{"n":"野生狗奶","c":"5407602"}
+  ],
+  "琵琶":[
+    {"n":"原皮(局内)","c":"10281"},{"n":"原皮(局外)","c":"100088"},
+    {"n":"弦月琵琶","c":"5408801"},{"n":"棱彩吉他","c":"5408802"}
+  ],
+  "荧光棒":[
+    {"n":"红色荧光棒(局外)","c":"100020"},{"n":"绿色荧光棒(局外)","c":"100021"},
+    {"n":"桃心荧光棒(局外)","c":"100033"},{"n":"花火荧光棒(局外)","c":"100059"},
+    {"n":"信标荧光棒(局外)","c":"100075"},{"n":"蓝色荧光棒(局外)","c":"100022"},
+    {"n":"喵喵荧光棒(局外)","c":"100103"},
+    {"n":"红色荧光棒(局内)","c":"10191"},{"n":"绿色荧光棒(局内)","c":"10192"},
+    {"n":"蓝色荧光棒(局内)","c":"10193"},{"n":"桃心荧光棒(局内)","c":"10216"},
+    {"n":"花火荧光棒(局内)","c":"10247"},{"n":"信标荧光棒(局内)","c":"10268"},
+    {"n":"喵喵荧光棒(局内)","c":"10299"}
+  ],
+  "栓动狙击枪":[
+    {"n":"原皮(局内)","c":"10282"},{"n":"原皮(局外)","c":"100089"},
+    {"n":"玫瑰聆响","c":"5409101"},{"n":"晚安好梦","c":"5409102"}
+  ],
+  "糯米炮":[
+    {"n":"原皮(局内)","c":"10296"},{"n":"原皮(局外)","c":"100102"}
+  ]
+};
+
+var skinType='character';
+var skinCurrentKey='';
+
+function getSkinSource(){return skinType==='character'?SKIN_DATA:ITEM_DATA;}
+function isOriginalSkin(rawName){return rawName.indexOf('原皮')!==-1;}
+function cleanSkinName(rawName){
+  return rawName.replace(/[（(]\s*局[内外]\s*[)）]/g,'').trim();
+}
+function getPositionTag(rawName){
+  if(/局内/.test(rawName))return '局内';
+  if(/局外/.test(rawName))return '局外';
+  return '';
+}
+function displaySkinName(rawName){
+  var tag=getPositionTag(rawName);
+  var base=cleanSkinName(rawName);
+  return tag?base+' · '+tag:base;
+}
+function countNonOriginal(data){
+  var total=0;
+  for(var k in data){
+    data[k].forEach(function(s){
+      if(!isOriginalSkin(s.n))total++;
+    });
+  }
+  return total;
+}
+function countNonOriginalIn(list){
+  var total=0;
+  (list||[]).forEach(function(s){
+    if(!isOriginalSkin(s.n))total++;
+  });
+  return total;
+}
+function parseSkinCode(code){
+  var parts=[];
+  var re=/(头发|衣服|头|脸|身)\s*(\d+)/g;
+  var m;
+  while((m=re.exec(code))!==null){
+    parts.push({label:m[1],value:m[2]});
+  }
+  if(parts.length===0){
+    var numMatch=code.match(/(\d+)/);
+    if(numMatch)parts.push({label:'代码',value:numMatch[1]});
+  }
+  return parts;
+}
+function parseExtraField(e){
+  var m=e.match(/\[(.+?)\](\d+)/);
+  if(m)return {label:m[1],value:m[2]};
+  var num=e.replace(/\D/g,'');
+  return {label:'额外',value:num};
+}
+function updateTriggerDisplay(){
+  var valEl=$('skinSelectValue');
+  if(!valEl)return;
+  if(skinCurrentKey){
+    valEl.textContent=skinCurrentKey;
+    valEl.classList.remove('placeholder');
+  }else{
+    valEl.textContent='— 请选择'+(skinType==='character'?'角色':'道具')+' —';
+    valEl.classList.add('placeholder');
+  }
+}
+
+function renderSkinList(){
+  var list=$('skinList');
+  var nameEl=$('skinCurrentName');
+  var countEl=$('skinCurrentCount');
+  if(!list)return;
+
+  var data=getSkinSource();
+
+  if(!skinCurrentKey||!data[skinCurrentKey]){
+    list.innerHTML='<div class="skin-empty">请选择'+(skinType==='character'?'角色':'道具')+'查看皮肤代码</div>';
+    nameEl.textContent='未选择';
+    countEl.textContent='0';
+    return;
+  }
+
+  var rawList=data[skinCurrentKey]||[];
+
+  nameEl.textContent=skinCurrentKey;
+  countEl.textContent=rawList.length;
+
+  if(rawList.length===0){
+    list.innerHTML='<div class="skin-empty">暂无皮肤数据</div>';
+    return;
+  }
+
+  list.innerHTML='';
+  rawList.forEach(function(skin){
+    var posTag=getPositionTag(skin.n);
+    var displayName=displaySkinName(skin.n);
+    var isOriginal=isOriginalSkin(skin.n);
+
+    var item=document.createElement('div');
+    item.className='skin-item';
+
+    var head=document.createElement('div');
+    head.className='skin-item-head';
+
+    var nameEl2=document.createElement('div');
+    nameEl2.className='skin-item-name';
+    nameEl2.textContent=displayName;
+
+    if(isOriginal&&!posTag){
+      var badge0=document.createElement('span');
+      badge0.className='skin-badge badge-original';
+      badge0.textContent='原皮';
+      nameEl2.appendChild(badge0);
+    }
+
+    if(skin.e){
+      var badge2=document.createElement('span');
+      badge2.className='skin-badge badge-extra';
+      badge2.textContent='额外';
+      nameEl2.appendChild(badge2);
+    }
+
+    head.appendChild(nameEl2);
+    item.appendChild(head);
+
+    var parts=parseSkinCode(skin.c);
+    var partsWrap=document.createElement('div');
+    partsWrap.className='skin-parts';
+
+    parts.forEach(function(p){
+      var btn=document.createElement('button');
+      btn.className='skin-part';
+      btn.innerHTML='<span class="skin-part-label">'+p.label+'</span>'+
+        '<span class="skin-part-value">'+p.value+'</span>';
+      btn.addEventListener('click',function(){
+        copyText2Clipboard(p.value,btn);
+      });
+      partsWrap.appendChild(btn);
+    });
+
+    if(skin.e){
+      var ex=parseExtraField(skin.e);
+      var btn=document.createElement('button');
+      btn.className='skin-part';
+      btn.innerHTML='<span class="skin-part-label">'+ex.label+'</span>'+
+        '<span class="skin-part-value">'+ex.value+'</span>';
+      btn.addEventListener('click',function(){
+        copyText2Clipboard(ex.value,btn);
+      });
+      partsWrap.appendChild(btn);
+    }
+
+    item.appendChild(partsWrap);
+    list.appendChild(item);
+  });
+}
+
+function copyText2Clipboard(text,btn){
+  function success(){
+    if(btn){
+      btn.classList.add('copied');
+      setTimeout(function(){btn.classList.remove('copied');},900);
+    }
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(success).catch(function(){
+      fallbackCopy(text,success);
+    });
+  }else{
+    fallbackCopy(text,success);
+  }
+}
+function fallbackCopy(text,cb){
+  var ta=document.createElement('textarea');
+  ta.value=text;
+  ta.style.position='fixed';
+  ta.style.opacity='0';
+  document.body.appendChild(ta);
+  ta.select();
+  try{
+    document.execCommand('copy');
+    cb&&cb();
+  }catch(e){}
+  document.body.removeChild(ta);
+}
+
+var skinPickerOverlay=$('skinPickerOverlay');
+var skinPickerList=$('skinPickerList');
+var skinPickerSearch=$('skinPickerSearch');
+var skinPickerTitle=$('skinPickerTitle');
+var skinPickerTotal=$('skinPickerTotal');
+var skinPickerSearchClear=$('skinPickerSearchClear');
+
+function openSkinPicker(){
+  skinPickerTitle.textContent='选择'+(skinType==='character'?'角色':'道具');
+  skinPickerSearch.value='';
+  skinPickerSearchClear.classList.remove('show');
+  renderSkinPickerList('');
+  skinPickerOverlay.classList.add('open');
+}
+function closeSkinPicker(){
+  skinPickerOverlay.classList.remove('open');
+  if(document.activeElement===skinPickerSearch)skinPickerSearch.blur();
+}
+function renderSkinPickerList(query){
+  var data=getSkinSource();
+  var keys=Object.keys(data).sort();
+  var q=query.toLowerCase().trim();
+  var filtered=q?keys.filter(function(k){
+    return k.toLowerCase().indexOf(q)!==-1;
+  }):keys;
+
+  skinPickerList.innerHTML='';
+  skinPickerTotal.textContent=filtered.length;
+
+  if(filtered.length===0){
+    skinPickerList.innerHTML='<div class="skin-picker-empty">没有找到匹配项</div>';
+    return;
+  }
+  filtered.forEach(function(name){
+    var b=document.createElement('button');
+    b.type='button';
+    b.className='skin-picker-item'+(name===skinCurrentKey?' active':'');
+    var n=document.createElement('span');
+    n.className='skin-picker-item-name';
+    n.textContent=name;
+    var cnt=document.createElement('span');
+    cnt.className='skin-picker-item-count';
+    cnt.textContent=countNonOriginalIn(data[name])+' 款';
+    b.appendChild(n);
+    b.appendChild(cnt);
+    b.addEventListener('click',function(){
+      skinCurrentKey=name;
+      updateTriggerDisplay();
+      renderSkinList();
+      closeSkinPicker();
+      playSound('click');
+    });
+    skinPickerList.appendChild(b);
+  });
+}
+
+function exportSkins(type){
+  var lines=[];
+  function writeData(data){
+    for(var name in data){
+      lines.push('【'+name+'】');
+      data[name].forEach(function(s){
+        lines.push(displaySkinName(s.n));
+        lines.push(s.c);
+        if(s.e)lines.push(s.e);
+        lines.push('');
+      });
+      lines.push('');
+    }
+  }
+  if(type==='all'){
+    lines.push('===== 员工皮肤代码 =====');
+    lines.push('');
+    writeData(SKIN_DATA);
+    lines.push('');
+    lines.push('===== 道具皮肤代码 =====');
+    lines.push('');
+    writeData(ITEM_DATA);
+  }else if(type==='character'){
+    lines.push('===== 员工皮肤代码 =====');
+    lines.push('');
+    writeData(SKIN_DATA);
+  }else{
+    lines.push('===== 道具皮肤代码 =====');
+    lines.push('');
+    writeData(ITEM_DATA);
+  }
+  var text=lines.join('\n');
+  var blob=new Blob([text],{type:'text/plain;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  var fileNames={character:'员工皮肤代码.txt',item:'道具皮肤代码.txt',all:'全部皮肤代码.txt'};
+  a.download=fileNames[type];
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(url);},3000);
+  playSound('success');
+}
+
+function initSkinCode(){
+  var typeTabs=document.querySelectorAll('#skinTypeTabs .skin-tab');
+
+  typeTabs.forEach(function(tab){
+    tab.addEventListener('click',function(){
+      typeTabs.forEach(function(t){t.classList.remove('active');});
+      this.classList.add('active');
+      skinType=this.dataset.type;
+      skinCurrentKey='';
+      updateTriggerDisplay();
+      renderSkinList();
+    });
+  });
+
+  $('skinSelectTrigger').addEventListener('click',openSkinPicker);
+  $('skinPickerClose').addEventListener('click',closeSkinPicker);
+  skinPickerOverlay.addEventListener('click',function(e){
+    if(e.target===skinPickerOverlay)closeSkinPicker();
+  });
+  skinPickerSearch.addEventListener('input',function(){
+    skinPickerSearchClear.classList.toggle('show',this.value.length>0);
+    renderSkinPickerList(this.value);
+  });
+  skinPickerSearchClear.addEventListener('click',function(){
+    skinPickerSearch.value='';
+    skinPickerSearchClear.classList.remove('show');
+    renderSkinPickerList('');
+    skinPickerSearch.focus();
+  });
+
+  $('exportCharBtn').addEventListener('click',function(){exportSkins('character');});
+  $('exportItemBtn').addEventListener('click',function(){exportSkins('item');});
+  $('exportAllBtn').addEventListener('click',function(){exportSkins('all');});
+
+  var totalSkin=countNonOriginal(SKIN_DATA);
+  var totalItem=countNonOriginal(ITEM_DATA);
+  $('totalSkinCount').textContent=totalSkin;
+  $('totalItemCount').textContent=totalItem;
+
+  updateTriggerDisplay();
+  renderSkinList();
+}
+
+function initUpdateModal(){
+  var modal=$('updateModal');
+  var closeBtn=$('closeUpdateBtn');
+  if(!modal)return;
+  function close(){
+    modal.classList.add('hidden');
+    setTimeout(function(){modal.style.display='none';},400);
+  }
+  if(closeBtn)closeBtn.addEventListener('click',close);
+  modal.addEventListener('click',function(e){
+    if(e.target===modal)close();
+  });
+  setTimeout(close,7000);
+}
+
+window.SW=(window.SW||{});
+(function(){
+  var SW=window.SW;
+  var API={
+    bug:'https://api.bugpk.com/api/163_music',
+    met:'https://api.injahow.cn/meting/',
+    meto:'https://api.i-meto.com/meting/api',
+    gd:'https://music-api.gdstudio.xyz/api.php',
+    audius:'https://api.audius.co/v1',
+    apple:'https://itunes.apple.com/search'
+  };
+  var APP='Soundwave';
+  var TIMEOUT=5500;
+  var LINES=[
+    {id:'cloud',name:'网易云 · 完整版',desc:'中文歌最全',icon:'cloud'},
+    {id:'global',name:'全球曲库',desc:'独立/电子/欧美',icon:'globe'},
+    {id:'apple',name:'Apple 曲库',desc:'全球主流歌试听',icon:'apple'},
+    {id:'all',name:'全线路聚合',desc:'几条一起搜去重',icon:'layers'}
+  ];
+  function qs(o){
+    var a=[],k;
+    for(k in o)if(Object.prototype.hasOwnProperty.call(o,k)&&o[k]!==undefined&&o[k]!==null){
+      a.push(encodeURIComponent(k)+'='+encodeURIComponent(o[k]));
+    }
+    return a.join('&');
+  }
+  function timeout(p,ms,label){
+    return new Promise(function(res,rej){
+      var done=false;
+      var t=setTimeout(function(){
+        if(done)return;done=true;
+        rej(new Error('timeout:'+(label||'')));
+      },ms||TIMEOUT);
+      p.then(function(v){if(!done){done=true;clearTimeout(t);res(v);}},
+             function(e){if(!done){done=true;clearTimeout(t);rej(e);}});
+    });
+  }
+  var MEM={};
+  function getJSON(url,ms,tries,ttl){
+    var ck=url.replace(/([?&])r=[^&]*/g,'$1').replace(/[?&]$/,'');
+    var hit=MEM[ck];
+    if(ttl&&hit&&Date.now()-hit.at<ttl)return Promise.resolve(hit.v);
+    if(tries===undefined)tries=1;
+    return timeout(fetch(url,{credentials:'omit',cache:'default'}).then(function(r){
+      if(!r.ok)throw new Error('http '+r.status);
+      return r.json();
+    }),ms||TIMEOUT).catch(function(e){
+      if(tries<=0)throw e;
+      return new Promise(function(r){setTimeout(r,150+Math.random()*180);})
+        .then(function(){return getJSON(url,ms,tries-1,ttl);});
+    }).then(function(v){
+      if(ttl)MEM[ck]={at:Date.now(),v:v};
+      return v;
+    });
+  }
+  var _seq=0;
+  function jsonp(url,ms){
+    return timeout(new Promise(function(res,rej){
+      var name='__swp'+(_seq++);
+      var s=document.createElement('script');
+      var done=false;
+      window[name]=function(d){done=true;res(d);cleanup();};
+      function cleanup(){
+        try{delete window[name];}catch(e){window[name]=undefined;}
+        if(s.parentNode)s.parentNode.removeChild(s);
+      }
+      s.onerror=function(){if(!done){done=true;rej(new Error('jsonp'));cleanup();}};
+      s.src=url+(url.indexOf('?')>-1?'&':'?')+'callback='+name;
+      document.head.appendChild(s);
+    }),ms||TIMEOUT);
+  }
+  function getSmart(key,path,ms,tries,ttl){
+    return getJSON(API[key]+path,ms,tries,ttl);
+  }
+  function pool(tasks,limit){
+    var out=new Array(tasks.length),i=0;
+    return new Promise(function(resolve){
+      var running=0,done=0;
+      if(!tasks.length)return resolve(out);
+      function next(){
+        while(running<limit&&i<tasks.length){
+          (function(idx){
+            running++;i++;
+            Promise.resolve().then(tasks[idx]).then(
+              function(v){out[idx]=v;},
+              function(){out[idx]=null;}
+            ).then(function(){
+              running--;done++;
+              if(done===tasks.length)resolve(out);else next();
+            });
+          })(i);
+        }
+      }
+      next();
+    });
+  }
+  function flatten(a){
+    var o=[];
+    a.forEach(function(x){if(x)o=o.concat(x);});
+    return o;
+  }
+  function fixedUrl(u){
+    if(!u)return '';
+    return String(u).replace(/^http:\/\//i,'https://');
+  }
+  function mk(o){
+    return {
+      key:o.key,id:o.id,src:o.src,
+      title:o.title||'未知曲目',
+      artist:o.artist||'未知歌手',
+      album:o.album||'',
+      pic:fixedUrl(o.pic||''),
+      dur:o.dur||0,
+      preview:o.preview||'',
+      extra:o.extra||null
+    };
+  }
+  function cloudPic(picId){
+    if(!picId)return '';
+    return API.met+'?'+qs({server:'netease',type:'pic',id:picId});
+  }
+  function bugSearch(q,limit){
+    return getSmart('bug','?'+qs({type:'search',keywords:q,n:limit||24}),3500,1)
+      .then(function(d){
+        var songs=(d&&d.data&&d.data.songs)||[];
+        if(!songs.length)throw new Error('empty');
+        return songs.map(function(s){
+          return mk({
+            key:'cloud:'+s.id,id:String(s.id),src:'cloud',
+            title:s.name,
+            artist:String(s.artists||'').split('/').join(' / '),
+            album:s.album||'',
+            pic:s.picUrl||'',
+            dur:s.duration?Math.round(s.duration/1000):0,
+            extra:{lyricId:s.id}
+          });
+        });
+      });
+  }
+  function bugUrl(id){
+    return getSmart('bug','?'+qs({type:'url',id:id}),3500,1).then(function(d){
+      var u=d&&d.data&&(Array.isArray(d.data)?(d.data[0]&&d.data[0].url):d.data.url);
+      if(!u)throw new Error('no url');
+      return u;
+    });
+  }
+  function bugLrc(id){
+    return getSmart('bug','?'+qs({type:'lyric',id:id}),3500,1).then(function(d){
+      var l=d&&d.data&&d.data.lrc;
+      if(!l)throw new Error('no lyric');
+      return l;
+    });
+  }
+  function gdSearch(q,limit){
+    return getSmart('gd','?'+qs({types:'search',source:'netease',name:q,count:limit||30,pages:1}))
+      .then(function(arr){
+        if(!Array.isArray(arr)||!arr.length)throw new Error('empty');
+        return arr.map(function(t){
+          return mk({
+            key:'cloud:'+t.id,id:String(t.id),src:'cloud',
+            title:t.name,
+            artist:Array.isArray(t.artist)?t.artist.join(' / '):(t.artist||''),
+            album:t.album||'',
+            pic:cloudPic(t.pic_id||t.pic),
+            extra:{picId:t.pic_id,lyricId:t.lyric_id||t.id}
+          });
+        });
+      });
+  }
+  function metoSearch(q,limit){
+    return getJSON(API.meto+'?'+qs({server:'netease',type:'search',id:q,limit:limit||24}))
+      .then(function(arr){
+        if(!Array.isArray(arr))return [];
+        return arr.map(function(t){
+          var m=String(t.url||'').match(/[?&]id=([^&]+)/);
+          if(!m)return null;
+          return mk({
+            key:'cloud:'+m[1],id:m[1],src:'cloud',
+            title:t.title,
+            artist:String(t.author||'').split('/').join(' / '),
+            pic:t.pic||'',
+            extra:{lyricId:m[1]}
+          });
+        }).filter(Boolean);
+      });
+  }
+  var searchMem={};
+  function searchCloud(q,limit){
+    var ck=q+'|'+(limit||30);
+    if(searchMem[ck]&&Date.now()-searchMem[ck].at<1800000){
+      return Promise.resolve(searchMem[ck].v);
+    }
+    return new Promise(function(resolve,reject){
+      var live=2,done=false;
+      function win(r){
+        if(done||!r||!r.length)return;
+        done=true;
+        searchMem[ck]={at:Date.now(),v:r};
+        resolve(r);
+      }
+      function lose(){if(--live<=0&&!done){done=true;reject(new Error('empty'));}}
+      gdSearch(q,limit).then(win,lose);
+      metoSearch(q,limit).then(win,lose);
+    }).catch(function(){return bugSearch(q,limit);});
+  }
+  function cloudDetail(id){
+    var DAY=24*3600000;
+    return getSmart('meto','?'+qs({server:'netease',type:'song',id:id}),5500,1,DAY)
+      .then(function(arr){
+        var t=arr&&arr[0];
+        if(!t)throw new Error('none');
+        return {
+          title:t.title,
+          artist:String(t.author||'').split('/').join(' / '),
+          pic:t.pic||'',
+          album:''
+        };
+      }).catch(function(){
+        return getSmart('met','?'+qs({server:'netease',type:'song',id:id}),5500,1,DAY)
+          .then(function(arr){
+            var t=arr&&arr[0];
+            if(!t)throw new Error('none');
+            return {
+              title:t.name||t.title,
+              artist:String(t.artist||t.author||'').split('/').join(' / '),
+              pic:t.pic||'',
+              album:''
+            };
+          });
+      });
+  }
+  function audiusSearch(q,limit){
+    return getJSON(API.audius+'/tracks/search?'+qs({query:q,app_name:APP,limit:limit||20}))
+      .then(function(d){
+        var arr=(d&&d.data)||[];
+        return arr.map(function(t){
+          var art=t.artwork||{};
+          return mk({
+            key:'audius:'+t.id,id:String(t.id),src:'global',
+            title:t.title,
+            artist:(t.user&&t.user.name)||'未知音乐人',
+            album:t.genre||t.mood||'全球曲库',
+            pic:art['480x480']||art['150x150']||art['1000x1000']||'',
+            dur:t.duration||0,
+            preview:API.audius+'/tracks/'+encodeURIComponent(t.id)+'/stream?app_name='+APP
+          });
+        });
+      });
+  }
+  var APPLE_REGIONS=['tw','hk','us'];
+  function appleOne(term,region,limit){
+    var url=API.apple+'?'+qs({
+      term:term,country:region,media:'music',entity:'song',limit:limit||10
+    });
+    return jsonp(url,6000).catch(function(){return getJSON(url,6000,1,3600000);})
+      .then(function(d){
+        var r=(d&&d.results)||[];
+        return r.filter(function(x){return x.previewUrl;}).map(function(x){
+          return mk({
+            key:'apple:'+x.trackId,id:String(x.trackId),src:'apple',
+            title:x.trackName,
+            artist:x.artistName,
+            album:x.collectionName||'',
+            pic:String(x.artworkUrl100||'').replace('100x100','400x400'),
+            dur:x.trackTimeMillis?Math.round(x.trackTimeMillis/1000):30,
+            preview:x.previewUrl
+          });
+        });
+      }).catch(function(){return [];});
+  }
+  function searchApple(q,limit){
+    return pool(APPLE_REGIONS.map(function(rg){
+      return function(){return appleOne(q,rg,limit||10);};
+    }),5).then(function(lists){
+      return dedupe(flatten(lists));
+    });
+  }
+  var CHARTS=[
+    {id:'3778678',name:'热歌榜'},
+    {id:'19723756',name:'飙升榜'},
+    {id:'3779629',name:'新歌榜'},
+    {id:'2884035',name:'原创榜'}
+  ];
+  function playlist(id){
+    return getSmart('gd','?'+qs({types:'playlist',source:'netease',id:id}),6000,1,1800000)
+      .then(function(d){
+        var p=(d&&d.playlist)||{};
+        var tracks=(p.tracks||[]).map(function(t){
+          return mk({
+            key:'cloud:'+t.id,id:String(t.id),src:'cloud',
+            title:t.name,artist:'',album:''
+          });
+        });
+        if(!tracks.length)throw new Error('empty');
+        return {name:p.name||'歌单',cover:p.coverImgUrl||'',tracks:tracks};
+      });
+  }
+  var urlCache={};
+  function gdUrl(id,br){
+    var ck='gd:'+id+':'+(br||320);
+    var hit=urlCache[ck];
+    if(hit&&Date.now()-hit.at<15*60000)return Promise.resolve(hit.url);
+    return getSmart('gd','?'+qs({types:'url',source:'netease',id:id,br:br||320}),6000,1,900000)
+      .then(function(d){
+        var u=d&&d.url;
+        if(!u)throw new Error('no url');
+        urlCache[ck]={at:Date.now(),url:u};
+        return u;
+      });
+  }
+  function metUrl(id){return API.met+'?'+qs({server:'netease',type:'url',id:id});}
+  function resolveLines(track){
+    var list=[];
+    if(track.preview)list.push({label:'源站直链',url:track.preview,direct:true});
+    if(track.src==='cloud'){
+      list.push({label:'主通道',need:function(){return gdUrl(track.id,320);}});
+      list.push({label:'备用通道 1',need:function(){return gdUrl(track.id,128);}});
+      list.push({label:'备用通道 2',need:function(){return Promise.resolve(metUrl(track.id));}});
+      list.push({label:'备用通道 3',need:function(){return bugUrl(track.id);}});
+    }
+    if(track.src==='apple'){
+      list.push({
+        label:'跨库兜底',need:function(){
+          return searchCloud(track.title+' '+String(track.artist).split(' / ')[0],5).then(function(r){
+            if(!r.length)throw new Error('none');
+            return bugUrl(r[0].id).catch(function(){return metUrl(r[0].id);});
+          });
+        }
+      });
+    }
+    return list;
+  }
+  function poolDetail(ids,limit,onEach){
+    var tasks=ids.map(function(id){
+      return function(){
+        return cloudDetail(id).then(function(d){
+          if(d&&onEach)onEach(id,d);
+          return d;
+        });
+      };
+    });
+    return pool(tasks,limit||5);
+  }
+  function lrcText(id){
+    var DAY=24*3600000;
+    return getSmart('gd','?'+qs({types:'lyric',source:'netease',id:id}),5500,1,DAY).then(function(d){
+      var l=d&&(d.lyric||d.lrc);
+      if(!l)throw new Error('no lyric');
+      return l;
+    }).catch(function(){
+      return getSmart('meto','?'+qs({server:'netease',type:'lrc',id:id}),5500,1,DAY);
+    }).catch(function(){
+      return bugLrc(id);
+    }).then(function(l){
+      if(typeof l==='string'&&l.trim())return l;
+      throw new Error('no lyric');
+    });
+  }
+  function dedupe(list){
+    var seen={},out=[];
+    list.forEach(function(t){
+      if(!t)return;
+      var k=normKey(t);
+      if(seen[k])return;
+      seen[k]=1;
+      out.push(t);
+    });
+    return out;
+  }
+  function normKey(t){
+    return String(t.title||'').toLowerCase().replace(/\s+/g,'')+'|'+
+           String(t.artist||'').toLowerCase().replace(/[\s\/,&]+/g,' ').trim().slice(0,14);
+  }
+  function interleave(lists){
+    var max=0,out=[],i,j;
+    lists.forEach(function(l){if(l&&l.length>max)max=l.length;});
+    for(i=0;i<max;i++){
+      for(j=0;j<lists.length;j++){
+        if(lists[j]&&lists[j][i])out.push(lists[j][i]);
+      }
+    }
+    return dedupe(out);
+  }
+  SW.Sources={
+    LINES:LINES,
+    CHARTS:CHARTS,
+    API:API,
+    search:function(q,lineId){
+      if(lineId==='cloud')return searchCloud(q,30);
+      if(lineId==='global')return audiusSearch(q,24);
+      if(lineId==='apple')return searchApple(q,12);
+      return Promise.all([
+        searchCloud(q,22).catch(function(){return [];}),
+        audiusSearch(q,8).catch(function(){return [];}),
+        searchApple(q,6).catch(function(){return [];})
+      ]).then(function(r){return interleave(r);});
+    },
+    searchCloud:searchCloud,
+    searchApple:searchApple,
+    searchAudius:audiusSearch,
+    playlist:playlist,
+    detail:cloudDetail,
+    poolDetail:poolDetail,
+    metUrl:metUrl,
+    gdUrl:gdUrl,
+    bugUrl:bugUrl,
+    lrcText:lrcText,
+    resolveLines:resolveLines,
+    cloudPic:cloudPic,
+    dedupe:dedupe
+  };
+})();
+
+(function(){
+  var SW=(window.SW=window.SW||{});
+  var K={
+    fav:'sw.fav.v1',
+    favBak:'sw.fav.bak.v1',
+    hist:'sw.hist.v1',
+    histBak:'sw.hist.bak.v1',
+    set:'sw.set.v1',
+    plays:'sw.plays.v1'
+  };
+  var HIST_MAX=400;
+  var DB_NAME='soundwave-db';
+  var mem={};
+  var db=null;
+  var dbReady=null;
+  function lsGet(k){
+    try{
+      var v=localStorage.getItem(k);
+      return v?JSON.parse(v):null;
+    }catch(e){return null;}
+  }
+  function lsSet(k,v){
+    try{localStorage.setItem(k,JSON.stringify(v));return true;}
+    catch(e){return false;}
+  }
+  function lsDel(k){try{localStorage.removeItem(k);}catch(e){}}
+  function openDB(){
+    if(dbReady)return dbReady;
+    dbReady=new Promise(function(resolve){
+      try{
+        if(!window.indexedDB)return resolve(null);
+        var req=indexedDB.open(DB_NAME,1);
+        req.onupgradeneeded=function(){
+          var d=req.result;
+          if(!d.objectStoreNames.contains('kv'))d.createObjectStore('kv');
+        };
+        req.onsuccess=function(){db=req.result;resolve(db);};
+        req.onerror=function(){resolve(null);};
+        setTimeout(function(){if(!db)resolve(null);},3000);
+      }catch(e){resolve(null);}
+    });
+    return dbReady;
+  }
+  function idbSet(key,val){
+    return openDB().then(function(d){
+      if(!d)return false;
+      return new Promise(function(res){
+        try{
+          var tx=d.transaction('kv','readwrite');
+          tx.objectStore('kv').put(val,key);
+          tx.oncomplete=function(){res(true);};
+          tx.onerror=function(){res(false);};
+        }catch(e){res(false);}
+      });
+    });
+  }
+  function idbGet(key){
+    return openDB().then(function(d){
+      if(!d)return null;
+      return new Promise(function(res){
+        try{
+          var tx=d.transaction('kv','readonly');
+          var rq=tx.objectStore('kv').get(key);
+          rq.onsuccess=function(){res(rq.result===undefined?null:rq.result);};
+          rq.onerror=function(){res(null);};
+        }catch(e){res(null);}
+      });
+    });
+  }
+  function save(name,val){
+    mem[name]=val;
+    var ok=lsSet(K[name],val);
+    if(ok)lsSet(K[name+'Bak'],val);
+    idbSet('sw:'+name,val);
+    idbSet('sw:'+name+':at',Date.now());
+    return ok;
+  }
+  function load(name){
+    var v=lsGet(K[name]);
+    if(v){mem[name]=v;return Promise.resolve(v);}
+    v=lsGet(K[name+'Bak']);
+    if(v){mem[name]=v;return Promise.resolve(v);}
+    if(mem[name])return Promise.resolve(mem[name]);
+    return idbGet('sw:'+name).then(function(d){
+      if(d){mem[name]=d;lsSet(K[name],d);return d;}
+      return null;
+    });
+  }
+  var DEFAULT_SET={
+    volume:0.72,
+    line:'cloud',
+    repeat:'list',
+    rate:1,
+    viz:true,
+    autoplay:true
+  };
+  var settings=Object.assign({},DEFAULT_SET);
+  function slim(t){
+    return {
+      key:t.key,id:t.id,src:t.src,title:t.title,artist:t.artist,
+      album:t.album||'',pic:t.pic||'',dur:t.dur||0,
+      preview:t.preview||'',
+      extra:t.extra?{picId:t.extra.picId,lyricId:t.extra.lyricId}:null
+    };
+  }
+  var favList=[];
+  var histList=[];
+  var playCount={};
+  function findIdx(list,key){
+    for(var i=0;i<list.length;i++)if(list[i].key===key)return i;
+    return -1;
+  }
+  var Store={
+    ready:false,
+    init:function(){
+      var self=this;
+      return Promise.all([load('fav'),load('hist'),load('set'),load('plays')])
+        .then(function(r){
+          favList=Array.isArray(r[0])?r[0]:[];
+          histList=Array.isArray(r[1])?r[1]:[];
+          if(r[2]&&typeof r[2]==='object')settings=Object.assign({},DEFAULT_SET,r[2]);
+          playCount=(r[3]&&typeof r[3]==='object')?r[3]:{};
+          self.ready=true;
+          return true;
+        });
+    },
+    favs:function(){return favList.slice();},
+    isFav:function(key){return findIdx(favList,key)>-1;},
+    toggleFav:function(track){
+      var i=findIdx(favList,track.key);
+      if(i>-1){
+        favList.splice(i,1);
+        save('fav',favList);
+        return false;
+      }
+      favList.unshift(Object.assign(slim(track),{at:Date.now()}));
+      save('fav',favList);
+      return true;
+    },
+    dropFav:function(key){
+      var i=findIdx(favList,key);
+      if(i>-1){favList.splice(i,1);save('fav',favList);}
+    },
+    clearFavs:function(){favList=[];save('fav',[]);},
+    hists:function(){return histList.slice();},
+    addHist:function(track){
+      var i=findIdx(histList,track.key);
+      if(i>-1)histList.splice(i,1);
+      histList.unshift(Object.assign(slim(track),{at:Date.now()}));
+      if(histList.length>HIST_MAX)histList.length=HIST_MAX;
+      playCount[track.key]=(playCount[track.key]||0)+1;
+      save('hist',histList);
+      save('plays',playCount);
+    },
+    dropHist:function(key){
+      var i=findIdx(histList,key);
+      if(i>-1){histList.splice(i,1);save('hist',histList);}
+    },
+    clearHist:function(){histList=[];save('hist',[]);},
+    topPlayed:function(n){
+      return histList.slice().sort(function(a,b){
+        return (playCount[b.key]||0)-(playCount[a.key]||0);
+      }).slice(0,n||12);
+    },
+    playCount:function(key){return playCount[key]||0;},
+    get:function(k){return k?settings[k]:Object.assign({},settings);},
+    set:function(k,v){
+      settings[k]=v;
+      save('set',settings);
+      return v;
+    },
+    resetSettings:function(){
+      settings=Object.assign({},DEFAULT_SET);
+      save('set',settings);
+    },
+    cacheGet:function(q){
+      var k='sc:'+q;
+      if(mem[k]&&Date.now()-mem[k].at<36e5)return Promise.resolve(mem[k].data);
+      return idbGet(k).then(function(d){
+        if(d&&Date.now()-d.at<36e5){mem[k]=d;return d.data;}
+        return null;
+      });
+    },
+    cacheSet:function(q,data){
+      var k='sc:'+q,v={at:Date.now(),data:data};
+      mem[k]=v;
+      idbSet(k,v);
+    },
+    dump:function(){
+      return JSON.stringify({
+        app:'soundwave',
+        v:1,
+        at:new Date().toISOString(),
+        fav:favList,
+        hist:histList,
+        plays:playCount,
+        set:settings
+      },null,2);
+    },
+    restore:function(text){
+      var d;
+      try{d=JSON.parse(text);}catch(e){throw new Error('存档文件读不出来');}
+      if(!d||d.app!=='soundwave')throw new Error('这不是本音乐台的存档文件');
+      favList=Array.isArray(d.fav)?d.fav:[];
+      histList=Array.isArray(d.hist)?d.hist:[];
+      playCount=(d.plays&&typeof d.plays==='object')?d.plays:{};
+      if(d.set)settings=Object.assign({},DEFAULT_SET,d.set);
+      save('fav',favList);save('hist',histList);
+      save('plays',playCount);save('set',settings);
+      return {fav:favList.length,hist:histList.length};
+    },
+    snapshot:function(){
+      save('fav',favList);save('hist',histList);save('set',settings);
+    },
+    limits:{
+      fav:function(){return favList.length;},
+      hist:function(){return histList.length;}
+    }
+  };
+  window.addEventListener('visibilitychange',function(){
+    if(document.hidden&&Store.ready)Store.snapshot();
+  });
+  window.addEventListener('pagehide',function(){if(Store.ready)Store.snapshot();});
+  SW.Store=Store;
+})();
+
+(function(){
+  var SW=(window.SW=window.SW||{});
+  var audio=null;
+  var actx=null;
+  var analyser=null;
+  var srcNode=null;
+  var gainNode=null;
+  var freq=null;
+  var usingWebAudio=false;
+  var queue=[];
+  var index=-1;
+  var current=null;
+  var lines=[];
+  var lineIdx=-1;
+  var loading=false;
+  var wantPlay=false;
+  var lineLabel='';
+  var tried={};
+  var shortTried=0;
+  var hopTimer=null;
+  var rafId=null;
+  var listeners={};
+  var def={
+    volume:0.72,
+    repeat:'list',
+    rate:1,
+    viz:true
+  };
+  var cfg=Object.assign({},def);
+  function on(evt,fn){
+    (listeners[evt]=listeners[evt]||[]).push(fn);
+  }
+  function emit(evt,data){
+    (listeners[evt]||[]).forEach(function(f){
+      try{f(data);}catch(e){}
+    });
+  }
+  function unlock(){
+    try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}
+    if(actx&&actx.state==='suspended')actx.resume().catch(function(){});
+  }
+  function wireWebAudio(){
+    if(usingWebAudio||!cfg.viz)return;
+    try{
+      var AC=window.AudioContext||window.webkitAudioContext;
+      if(!AC)return;
+      actx=actx||new AC();
+      if(!srcNode){
+        srcNode=actx.createMediaElementSource(audio);
+        gainNode=actx.createGain();
+        analyser=actx.createAnalyser();
+        analyser.fftSize=256;
+        analyser.smoothingTimeConstant=0.78;
+        freq=new Uint8Array(analyser.frequencyBinCount);
+        srcNode.connect(gainNode);
+        gainNode.connect(analyser);
+        analyser.connect(actx.destination);
+      }
+      usingWebAudio=true;
+    }catch(e){
+      usingWebAudio=false;
+    }
+  }
+  function init(opts){
+    opts=opts||{};
+    Object.assign(cfg,opts);
+    audio=opts.audio||new Audio();
+    audio.preload='auto';
+    audio.setAttribute('playsinline','');
+    audio.volume=cfg.volume;
+    audio.playbackRate=cfg.rate;
+    audio.addEventListener('ended',function(){
+      if(cfg.repeat==='one'){
+        audio.currentTime=0;
+        audio.play().catch(function(){});
+        return;
+      }
+      next(true);
+    });
+    audio.addEventListener('play',function(){
+      emit('state',snapshot());
+      syncMediaSession();
+    });
+    audio.addEventListener('pause',function(){emit('state',snapshot());syncMediaSession();});
+    audio.addEventListener('loadedmetadata',function(){
+      loading=false;
+      var got=audio.duration||0;
+      if(wantPlay&&current&&got>0&&got<=46&&
+          (current.dur||0)>90&&shortTried<2&&lineIdx<lines.length-1){
+        shortTried++;
+        emit('note','这条只给了片段，正在换通道取完整版…');
+        hop('片段过短');
+        return;
+      }
+      emit('meta',snapshot());
+      emit('state',snapshot());
+    });
+    audio.addEventListener('waiting',function(){emit('buffering',true);});
+    audio.addEventListener('playing',function(){
+      loading=false;
+      emit('buffering',false);
+      emit('state',snapshot());
+      syncMediaSession();
+    });
+    audio.addEventListener('canplay',function(){emit('buffering',false);});
+    audio.addEventListener('timeupdate',function(){emit('tick',snapshot());});
+    audio.addEventListener('error',function(){
+      if(!wantPlay)return;
+      hop('播放出错');
+    });
+    audio.addEventListener('stalled',function(){
+      if(wantPlay)hop('连接卡住');
+    });
+    startLoop();
+    return true;
+  }
+  function snapshot(){
+    var d=audio?audio.duration:0;
+    if(!isFinite(d)||d<0)d=0;
+    return {
+      playing:!!(audio&&!audio.paused),
+      current:current,
+      index:index,
+      queueLen:queue.length,
+      time:audio?audio.currentTime:0,
+      dur:d||(current&&current.dur)||0,
+      loading:loading,
+      line:lineLabel,
+      volume:cfg.volume,
+      repeat:cfg.repeat,
+      rate:cfg.rate,
+      viz:cfg.viz,
+      hasQueue:queue.length>0
+    };
+  }
+  function play(track,list,idx){
+    if(list){queue=list.slice();}
+    if(typeof idx==='number')index=idx;
+    else if(list){
+      index=-1;
+      for(var i=0;i<queue.length;i++)if(queue[i].key===track.key){index=i;break;}
+      if(index<0){queue.unshift(track);index=0;}
+    }else if(index<0)index=0;
+    current=track;
+    tried={};
+    lines=SW.Sources.resolveLines(track);
+    lineIdx=-1;
+    shortTried=0;
+    wantPlay=true;
+    hop('开始');
+    emit('track',snapshot());
+    if(SW.Store)SW.Store.addHist(track);
+  }
+  function hop(reason){
+    if(!wantPlay||!current)return;
+    var nextIdx=lineIdx+1;
+    if(nextIdx>=lines.length){
+      loading=false;
+      wantPlay=false;
+      emit('fail',{track:current,reason:reason});
+      emit('state',snapshot());
+      return;
+    }
+    lineIdx=nextIdx;
+    var line=lines[lineIdx];
+    lineLabel=line.label;
+    loading=true;
+    emit('state',snapshot());
+    Promise.resolve()
+      .then(function(){return line.need?line.need():line.url;})
+      .then(function(url){
+        if(!url)throw new Error('empty');
+        if(lineIdx!==nextIdx)return;
+        attach(url,nextIdx);
+      })
+      .catch(function(){
+        if(lineIdx===nextIdx)hop('线路不可用');
+      });
+  }
+  function attach(url,expect){
+    clearTimeout(hopTimer);
+    loading=true;
+    function doLoad(anon){
+      try{audio.pause();}catch(e){}
+      try{audio.removeAttribute('src');audio.load();}catch(e){}
+      if(anon)audio.crossOrigin='anonymous';
+      else audio.removeAttribute('crossorigin');
+      audio.src=url;
+      audio.playbackRate=cfg.rate;
+      var settled=false;
+      var pr=audio.play();
+      if(pr&&pr.then){
+        pr.then(function(){
+          settled=true;
+          if(anon&&cfg.viz)wireWebAudio();
+          if(actx&&actx.state==='suspended')actx.resume().catch(function(){});
+          loading=false;
+          emit('state',snapshot());
+        }).catch(function(e){
+          if(settled)return;
+          settled=true;
+          if(lineIdx!==expect)return;
+          if(anon){
+            doLoad(false);
+          }else{
+            hop('地址打不开');
+          }
+        });
+      }
+      hopTimer=setTimeout(function(){
+        if(!wantPlay||lineIdx!==expect)return;
+        if(!settled&&!(audio.currentTime>0)){
+          if(anon){settled=true;doLoad(false);}
+          else hop('加载超时');
+        }
+      },12000);
+    }
+    doLoad(true);
+  }
+  function toggle(){
+    if(!audio||!current)return false;
+    unlock();
+    if(audio.paused){
+      wantPlay=true;
+      if(!audio.src||audio.error){
+        hop(lineIdx<0?'重新开始':'重连');
+      }else{
+        audio.play().catch(function(){
+          hop('重新连接');
+        });
+      }
+    }else{
+      audio.pause();
+    }
+    return true;
+  }
+  function pause(){if(audio)audio.pause();}
+  function pickNext(){
+    if(!queue.length)return -1;
+    if(cfg.repeat==='shuffle'){
+      if(queue.length===1)return 0;
+      var r=index;
+      while(r===index)r=Math.floor(Math.random()*queue.length);
+      return r;
+    }
+    return (index+1)%queue.length;
+  }
+  function next(auto){
+    if(!queue.length)return;
+    var i=pickNext();
+    if(i<0)return;
+    play(queue[i],null,i);
+  }
+  function prev(){
+    if(!queue.length)return;
+    if(audio&&audio.currentTime>4){audio.currentTime=0;return;}
+    var i=cfg.repeat==='shuffle'
+      ?Math.floor(Math.random()*queue.length)
+      :(index-1+queue.length)%queue.length;
+    play(queue[i],null,i);
+  }
+  function seekRatio(r){
+    if(!audio)return;
+    var d=audio.duration;
+    if(!isFinite(d)||d<=0)return;
+    audio.currentTime=Math.max(0,Math.min(d-0.3,d*r));
+    emit('tick',snapshot());
+  }
+  function seekSec(s){
+    if(!audio)return;
+    var d=audio.duration;
+    if(!isFinite(d)||d<=0)return;
+    audio.currentTime=Math.max(0,Math.min(d-0.3,s));
+    emit('tick',snapshot());
+  }
+  function setVolume(v){
+    cfg.volume=Math.max(0,Math.min(1,v));
+    if(audio)audio.volume=cfg.volume;
+    if(SW.Store)SW.Store.set('volume',cfg.volume);
+    emit('state',snapshot());
+  }
+  function setRepeat(m){
+    cfg.repeat=m;
+    if(SW.Store)SW.Store.set('repeat',m);
+    emit('state',snapshot());
+  }
+  function setRate(r){
+    cfg.rate=r;
+    if(audio)audio.playbackRate=r;
+    if(SW.Store)SW.Store.set('rate',r);
+    emit('state',snapshot());
+  }
+  function setViz(on){
+    cfg.viz=!!on;
+    if(SW.Store)SW.Store.set('viz',cfg.viz);
+    if(!cfg.viz)usingWebAudio=false;
+    emit('state',snapshot());
+  }
+  function setQueue(list,keepCurrent){
+    queue=list?list.slice():[];
+    if(keepCurrent&&current){
+      for(var i=0;i<queue.length;i++)if(queue[i].key===current.key){index=i;return;}
+    }
+  }
+  function removeFromQueue(key){
+    for(var i=0;i<queue.length;i++){
+      if(queue[i].key===key){
+        queue.splice(i,1);
+        if(i<index)index--;
+        else if(i===index&&current&&current.key===key)index=Math.max(-1,index-1);
+        emit('state',snapshot());
+        return;
+      }
+    }
+  }
+  function startLoop(){
+    if(rafId)return;
+    function loop(){
+      rafId=requestAnimationFrame(loop);
+      emit('frame',snapshot());
+    }
+    rafId=requestAnimationFrame(loop);
+  }
+  function levels(){
+    if(!analyser)return null;
+    analyser.getByteFrequencyData(freq);
+    return freq;
+  }
+  function peak(){
+    if(!analyser)return 0;
+    var f=levels(),m=0;
+    for(var i=0;i<f.length;i++)if(f[i]>m)m=f[i];
+    return m/255;
+  }
+  function syncMediaSession(){
+    if(!('mediaSession' in navigator)||!current)return;
+    try{
+      var art=current.pic?[{src:current.pic,sizes:'500x500',type:'image/jpeg'}]:[];
+      navigator.mediaSession.metadata=new window.MediaMetadata({
+        title:current.title,
+        artist:current.artist,
+        album:current.album||'云间音乐',
+        artwork:art
+      });
+      navigator.mediaSession.playbackState=audio&&!audio.paused?'playing':'paused';
+    }catch(e){}
+  }
+  function hookMediaKeys(){
+    if(!('mediaSession' in navigator))return;
+    try{
+      navigator.mediaSession.setActionHandler('play',function(){toggle();});
+      navigator.mediaSession.setActionHandler('pause',function(){pause();});
+      navigator.mediaSession.setActionHandler('previoustrack',function(){prev();});
+      navigator.mediaSession.setActionHandler('nexttrack',function(){next();});
+      navigator.mediaSession.setActionHandler('seekto',function(d){
+        if(d&&typeof d.seekTime==='number')seekSec(d.seekTime);
+      });
+    }catch(e){}
+  }
+  function applySaved(){
+    if(!SW.Store)return;
+    cfg.volume=SW.Store.get('volume');
+    cfg.repeat=SW.Store.get('repeat');
+    cfg.rate=SW.Store.get('rate');
+    cfg.viz=SW.Store.get('viz');
+    if(audio){audio.volume=cfg.volume;audio.playbackRate=cfg.rate;}
+  }
+  function fmtTime(s){
+    s=Math.max(0,Math.floor(s||0));
+    var m=Math.floor(s/60),ss=s%60;
+    return m+':'+(ss<10?'0':'')+ss;
+  }
+  SW.Player={
+    init:init,
+    on:on,
+    play:play,
+    toggle:toggle,
+    pause:pause,
+    next:next,
+    prev:prev,
+    seekRatio:seekRatio,
+    seekSec:seekSec,
+    setVolume:setVolume,
+    setRepeat:setRepeat,
+    setRate:setRate,
+    setViz:setViz,
+    setQueue:setQueue,
+    removeFromQueue:removeFromQueue,
+    snapshot:snapshot,
+    levels:levels,
+    peak:peak,
+    hookMediaKeys:hookMediaKeys,
+    applySaved:applySaved,
+    unlock:unlock,
+    fmtTime:fmtTime,
+    el:function(){return audio;},
+    queue:function(){return queue.slice();},
+    current:function(){return current;}
+  };
+})();
+
+var SoundwaveUI=(function(){
+  var SW=window.SW, S=SW.Sources, P=SW.Player, Store=SW.Store;
+  var $=function(id){return document.getElementById(id);};
+  var tab='search';
+  var line='cloud';
+  var results=[];
+  var query='';
+  var busy=false;
+  var searchSeq=0;
+
+  function esc(s){
+    return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function renderLines(){
+    var box=$('swLines');
+    if(!box)return;
+    box.innerHTML=S.LINES.map(function(l){
+      return '<button class="skin-tab'+(line===l.id?' active':'')+'" data-line="'+l.id+'">'+esc(l.name)+'</button>';
+    }).join('');
+    var tag=$('swLineTag');
+    if(tag){
+      var curLine=S.LINES.find(function(l){return l.id===line;});
+      if(curLine)tag.textContent=curLine.name;
+    }
+  }
+
+  function listAt(){
+    if(tab==='fav')return Store.favs();
+    if(tab==='hist')return Store.hists();
+    return results;
+  }
+
+  function itemHTML(t,i){
+    var cur=P.current();
+    var isCur=cur&&cur.key===t.key;
+    var isFav=Store.isFav(t.key);
+    return '<div class="sw-item'+(isCur?' on':'')+'" data-key="'+esc(t.key)+'">'+
+      '<div class="sw-item-cover">'+
+        '<i class="fas fa-music"></i>'+
+        (t.pic?'<img src="'+esc(t.pic)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'')+
+      '</div>'+
+      '<div class="sw-item-meta">'+
+        '<div class="sw-item-title">'+esc(t.title)+'</div>'+
+        '<div class="sw-item-artist">'+esc(t.artist)+(t.src==='apple'?' · 试听':'')+'</div>'+
+      '</div>'+
+      '<div class="sw-item-acts">'+
+        '<button class="sw-icon'+(isFav?' act':'')+'" data-fav="1" title="收藏"><i class="'+(isFav?'fas':'far')+' fa-heart"></i></button>'+
+        '<button class="sw-icon" data-dl="1" title="下载"><i class="fas fa-download"></i></button>'+
+      '</div>'+
+    '</div>';
+  }
+
+  function renderList(){
+    var box=$('swList');
+    if(!box)return;
+    if(tab==='fav'){
+      var favs=Store.favs();
+      box.innerHTML=favs.length?favs.map(itemHTML).join(''):'<div class="sw-empty">还没有收藏，听到喜欢的点个 ♡</div>';
+      return;
+    }
+    if(tab==='hist'){
+      var hists=Store.hists();
+      box.innerHTML=hists.length?hists.map(itemHTML).join(''):'<div class="sw-empty">还没有播放记录</div>';
+      return;
+    }
+    if(busy){box.innerHTML='<div class="sw-empty">正在搜索…</div>';return;}
+    if(!results.length){
+      box.innerHTML='<div class="sw-empty">'+(query?'没搜到，换个关键词或换条线路试试':'输入歌手或歌名开始搜索')+'</div>';
+      return;
+    }
+    box.innerHTML=results.map(itemHTML).join('');
+  }
+
+  function syncPlayer(){
+    var s=P.snapshot();
+    var t=s.current;
+    var el=$('swPlayer');
+    if(!el)return;
+    if(!t){el.classList.remove('up');return;}
+    el.classList.add('up');
+    $('swTitle').textContent=t.title;
+    var note='';
+    if(s.dur>0&&s.dur<60&&t.dur>90)note=' · 片段';
+    $('swArtist').textContent=(s.loading&&!s.playing)?'正在连接…':(t.artist+(s.line?' · '+s.line:'')+note);
+    var cover=$('swCover');
+    if(t.pic){
+      if(cover.getAttribute('data-pic')!==t.pic){
+        cover.setAttribute('data-pic',t.pic);
+        cover.innerHTML='<img src="'+esc(t.pic)+'" alt="" onerror="this.style.display=\'none\'">';
+      }
+    }
+    cover.classList.toggle('playing',s.playing);
+    var ic=$('swToggle');
+    ic.innerHTML=s.playing?'<i class="fas fa-pause"></i>':'<i class="fas fa-play"></i>';
+    $('swNow').textContent=P.fmtTime(s.time);
+    $('swAll').textContent=P.fmtTime(s.dur);
+    var r=s.dur?(s.time/s.dur)*100:0;
+    $('swFill').style.width=Math.min(100,r)+'%';
+    $('swVolFill').style.width=(s.volume*100)+'%';
+    var volIcon=$('swVolIcon');
+    if(volIcon){
+      volIcon.className=s.volume===0?'fas fa-volume-xmark':(s.volume<0.4?'fas fa-volume-low':(s.volume<0.75?'fas fa-volume-low':'fas fa-volume-high'));
+    }
+    markPlaying();
+  }
+
+  function markPlaying(){
+    var cur=P.current();
+    var box=$('swList');
+    if(!box)return;
+    Array.prototype.forEach.call(box.children,function(it){
+      if(it.classList&&it.classList.contains('sw-item')){
+        it.classList.toggle('on',!!cur&&it.getAttribute('data-key')===cur.key);
+      }
+    });
+  }
+
+  function doSearch(q){
+    q=String(q||'').trim();
+    if(!q){return;}
+    query=q;
+    tab='search';
+    syncTabs();
+    busy=true;
+    results=[];
+    renderList();
+    var seq=++searchSeq;
+    var ck=line+':'+q;
+    Store.cacheGet(ck).then(function(cached){
+      if(seq!==searchSeq)return;
+      if(cached&&cached.length){
+        results=cached;
+        busy=false;
+        renderList();
+        return;
+      }
+      runSearch(q,seq,ck);
+    });
+  }
+
+  function runSearch(q,seq,ck){
+    S.search(q,line).then(function(r){
+      if(seq!==searchSeq)return;
+      results=r||[];
+      busy=false;
+      if(results.length)Store.cacheSet(ck,results);
+      renderList();
+    }).catch(function(){
+      if(seq!==searchSeq)return;
+      busy=false;
+      renderList();
+    });
+  }
+
+  function syncTabs(){
+    var box=$('swTabs');
+    if(!box)return;
+    Array.prototype.forEach.call(box.children,function(b){
+      b.classList.toggle('active',b.dataset.tab===tab);
+    });
+  }
+
+  function safeName(s){
+    return String(s).replace(/[\\/:*?"<>|]/g,' ').replace(/\s+/g,' ').trim().slice(0,80);
+  }
+
+  function guessExt(url,track){
+    var u=String(url).toLowerCase();
+    if(u.indexOf('.flac')>-1)return 'flac';
+    if(u.indexOf('.m4a')>-1||u.indexOf('.aac')>-1)return 'm4a';
+    if(u.indexOf('.wav')>-1)return 'wav';
+    if(track&&track.src==='apple')return 'm4a';
+    return 'mp3';
+  }
+
+  var downloading={};
+  function download(track){
+    if(downloading[track.key])return;
+    downloading[track.key]=1;
+    var lines=S.resolveLines(track);
+    var url=null;
+    (function step(i){
+      if(i>=lines.length){
+        delete downloading[track.key];
+        return;
+      }
+      var l=lines[i];
+      Promise.resolve().then(function(){return l.need?l.need():l.url;})
+        .then(function(u){
+          if(!u)throw new Error('empty');
+          url=u;
+          return fetch(u,{mode:'cors',credentials:'omit'});
+        })
+        .then(function(r){
+          if(!r.ok)throw new Error('http '+r.status);
+          return r.blob();
+        })
+        .then(function(blob){
+          if(blob.size<4096)throw new Error('too small');
+          var name=safeName(track.artist+' - '+track.title)+'.'+guessExt(url,track);
+          var a=document.createElement('a');
+          a.href=URL.createObjectURL(blob);
+          a.download=name;
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},4000);
+          delete downloading[track.key];
+        })
+        .catch(function(){step(i+1);});
+    })(0);
+  }
+
+  function findTrack(key){
+    var list=listAt();
+    for(var i=0;i<list.length;i++)if(list[i].key===key)return list[i];
+    return null;
+  }
+
+  function bind(){
+    var linesBox=$('swLines');
+    if(linesBox){
+      linesBox.addEventListener('click',function(e){
+        var b=e.target.closest('[data-line]');
+        if(!b)return;
+        line=b.getAttribute('data-line');
+        Store.set('line',line);
+        renderLines();
+        if(query)doSearch(query);
+      });
+    }
+    var tabsBox=$('swTabs');
+    if(tabsBox){
+      tabsBox.addEventListener('click',function(e){
+        var b=e.target.closest('[data-tab]');
+        if(!b)return;
+        tab=b.getAttribute('data-tab');
+        syncTabs();
+        renderList();
+      });
+    }
+    var listBox=$('swList');
+    if(listBox){
+      listBox.addEventListener('click',function(e){
+        var item=e.target.closest('.sw-item');
+        if(!item)return;
+        var key=item.getAttribute('data-key');
+        var track=findTrack(key);
+        if(!track)return;
+        var favBtn=e.target.closest('[data-fav]');
+        var dlBtn=e.target.closest('[data-dl]');
+        if(favBtn){
+          e.stopPropagation();
+          Store.toggleFav(track);
+          renderList();
+          return;
+        }
+        if(dlBtn){
+          e.stopPropagation();
+          download(track);
+          return;
+        }
+        P.unlock();
+        var list=listAt();
+        P.play(track,list,list.indexOf(track));
+      });
+    }
+    var goBtn=$('swGo');
+    var qInput=$('swQuery');
+    if(goBtn&&qInput){
+      goBtn.addEventListener('click',function(){doSearch(qInput.value);});
+      qInput.addEventListener('keydown',function(e){
+        if(e.key==='Enter'){e.preventDefault();doSearch(qInput.value);}
+      });
+    }
+    var prevBtn=$('swPrev');
+    var toggleBtn=$('swToggle');
+    var nextBtn=$('swNext');
+    if(prevBtn)prevBtn.addEventListener('click',function(){P.prev();});
+    if(toggleBtn)toggleBtn.addEventListener('click',function(){P.unlock();P.toggle();});
+    if(nextBtn)nextBtn.addEventListener('click',function(){P.next();});
+
+    var trackEl=$('swTrack');
+    if(trackEl){
+      var dragging=false;
+      function ratioFrom(ev){
+        var r=trackEl.getBoundingClientRect();
+        var x=(ev.touches?ev.touches[0].clientX:ev.clientX)-r.left;
+        return Math.max(0,Math.min(1,x/r.width));
+      }
+      function move(ev){
+        if(!dragging)return;
+        var rr=ratioFrom(ev);
+        $('swFill').style.width=(rr*100)+'%';
+        var s=P.snapshot();
+        $('swNow').textContent=P.fmtTime((s.dur||0)*rr);
+        if(ev.preventDefault)ev.preventDefault();
+      }
+      function up(ev){
+        if(!dragging)return;
+        dragging=false;
+        var cx=ev.changedTouches?ev.changedTouches[0].clientX:ev.clientX;
+        var r=trackEl.getBoundingClientRect();
+        P.seekRatio(Math.max(0,Math.min(1,(cx-r.left)/r.width)));
+      }
+      trackEl.addEventListener('pointerdown',function(ev){
+        dragging=true;
+        try{trackEl.setPointerCapture(ev.pointerId);}catch(e){}
+        move(ev);
+      });
+      trackEl.addEventListener('pointermove',move);
+      trackEl.addEventListener('pointerup',up);
+      trackEl.addEventListener('pointercancel',up);
+      trackEl.addEventListener('touchstart',function(ev){dragging=true;move(ev);},{passive:true});
+      trackEl.addEventListener('touchmove',move,{passive:false});
+      trackEl.addEventListener('touchend',up);
+    }
+
+    var volTrackEl=$('swVolTrack');
+    if(volTrackEl){
+      var vDrag=false;
+      function vSet(ev){
+        var r=volTrackEl.getBoundingClientRect();
+        var x=(ev.touches?ev.touches[0].clientX:ev.clientX)-r.left;
+        var v=Math.max(0,Math.min(1,x/r.width));
+        P.setVolume(v);
+        $('swVolFill').style.width=(v*100)+'%';
+      }
+      volTrackEl.addEventListener('pointerdown',function(ev){
+        vDrag=true;
+        try{volTrackEl.setPointerCapture(ev.pointerId);}catch(e){}
+        vSet(ev);
+      });
+      volTrackEl.addEventListener('pointermove',function(ev){if(vDrag)vSet(ev);});
+      volTrackEl.addEventListener('pointerup',function(){vDrag=false;});
+      volTrackEl.addEventListener('touchstart',function(ev){vDrag=true;vSet(ev);},{passive:true});
+      volTrackEl.addEventListener('touchmove',function(ev){if(vDrag){vSet(ev);ev.preventDefault();}},{passive:false});
+      volTrackEl.addEventListener('touchend',function(){vDrag=false;});
+    }
+
+    var volSlider=$('swVol');
+    if(volSlider){
+      volSlider.addEventListener('input',function(){
+        var v=this.value/100;
+        P.setVolume(v);
+        $('swVolVal').textContent=this.value+'%';
+      });
+    }
+    var repeatBox=$('swRepeat');
+    if(repeatBox){
+      repeatBox.addEventListener('click',function(e){
+        var b=e.target.closest('[data-repeat]');
+        if(!b)return;
+        var m=b.getAttribute('data-repeat');
+        P.setRepeat(m);
+        paintRepeat();
+      });
+    }
+    var vizToggle=$('swViz');
+    if(vizToggle){
+      vizToggle.addEventListener('click',function(){
+        var on=!P.snapshot().viz;
+        P.setViz(on);
+        this.classList.toggle('on',on);
+      });
+    }
+    var clearFav=$('swClearFav');
+    if(clearFav){
+      clearFav.addEventListener('click',function(){
+        if(confirm('清空全部收藏？这个撤不回来。')){
+          Store.clearFavs();
+          if(tab==='fav')renderList();
+          paintStats();
+        }
+      });
+    }
+
+    P.on('state',syncPlayer);
+    P.on('tick',syncPlayer);
+    P.on('track',function(){syncPlayer();});
+    P.on('meta',syncPlayer);
+  }
+
+  function paintRepeat(){
+    var box=$('swRepeat');
+    if(!box)return;
+    var cur=P.snapshot().repeat;
+    Array.prototype.forEach.call(box.children,function(b){
+      b.classList.toggle('active',b.getAttribute('data-repeat')===cur);
+    });
+  }
+
+  function paintStats(){
+    var f=$('swStatFav');
+    var h=$('swStatHist');
+    if(f)f.textContent=Store.favs().length;
+    if(h)h.textContent=Store.hists().length;
+  }
+
+  function init(){
+    renderLines();
+    syncTabs();
+    renderList();
+    bind();
+    var savedLine=Store.get('line');
+    if(savedLine&&S.LINES.some(function(l){return l.id===savedLine;}))line=savedLine;
+    renderLines();
+    var s=P.snapshot();
+    var vol=$('swVol');
+    if(vol){
+      vol.value=Math.round(s.volume*100);
+      $('swVolVal').textContent=Math.round(s.volume*100)+'%';
+    }
+    var viz=$('swViz');
+    if(viz)viz.classList.toggle('on',s.viz);
+    paintRepeat();
+    paintStats();
+    syncPlayer();
+  }
+
+  return {
+    init:init,
+    renderList:renderList,
+    paintStats:paintStats,
+    syncPlayer:syncPlayer
+  };
+})();
+
+function init(){
+  buildColorPanel();
+  var saved=localStorage.getItem(PALETTE_KEY)||'0';
+  if(saved.indexOf('solid:')===0)applySolidColor(saved.slice(6));
+  else setScheme(parseInt(saved,10)||0);
+
+  initTheme();
+  initBg();
+  initDock();
+  initSettings();
+  initSkinCode();
+  initUpdateModal();
+
+  var paletteBtn=$('paletteBtn');
+  var colorPanel=$('colorPanel');
+  paletteBtn.addEventListener('click',function(e){
+    e.stopPropagation();
+    colorPanel.classList.toggle('open');
+  });
+  document.addEventListener('click',function(e){
+    if(!colorPanel.contains(e.target)&&!paletteBtn.contains(e.target)){
+      colorPanel.classList.remove('open');
+    }
+  });
+
+  SW.Store.init().then(function(){
+    var savedSet=SW.Store.get();
+    SW.Player.init({
+      volume:savedSet.volume,
+      repeat:savedSet.repeat,
+      rate:savedSet.rate,
+      viz:savedSet.viz
+    });
+    SW.Player.applySaved();
+    SW.Player.hookMediaKeys();
+    SoundwaveUI.init();
+  });
+
+  (async function(){
+    try{
+      if(sbClient){
+        var {data:{session}} = await sbClient.auth.getSession();
+        if(session&&session.user){ enterApp(session.user,true); return; }
+      }
+      showLogin();
+    }catch(err){
+      console.error(err);
+      showLogin();
+    }
+  })();
+}
+
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',init);
+}else{
+  init();
+}
+
+})();
+</script>
+</body>
+</html>
